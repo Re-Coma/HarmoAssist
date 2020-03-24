@@ -1,12 +1,14 @@
 
 package kr.sweetcase.harmoassist
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import kr.sweetcase.harmoassist.databinding.ItemMusicBinding
@@ -30,6 +32,7 @@ var preSelectedIdx = -1 // 이전 선택 버퍼
 class MusicListActivity :AppCompatActivity() {
 
     val music = ArrayList<Music>()
+    val context = this
 
     // 타이틀에 대한 인덱스 찾기
     // 선택이 안되어 있다면 -1 추출
@@ -67,7 +70,8 @@ class MusicListActivity :AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MusicListActivity)
             adapter = MusicAdapter(
                 // Music Adapter 멤버변수에 선택, 이전에 선택된 인덱스추가
-                music
+                music,
+                context=context
             ) { music ->
 
                 // 선택된 인덱스 갱신
@@ -89,6 +93,7 @@ class MusicListActivity :AppCompatActivity() {
     //네트워크 시에는 별도로 하기
     class MusicAdapter(
         private val items :List<Music>,
+        private val context : Context,
         private  val clickListener: (music: Music)->Unit
     )  : RecyclerView.Adapter<MusicAdapter.MusicViewHolder>() {
 
@@ -122,6 +127,7 @@ class MusicListActivity :AppCompatActivity() {
 
         override fun onBindViewHolder(holder: MusicViewHolder, position: Int) {
             holder.binding.music = items[position]
+
 
             // 새롭게 등장한 아이템이 선택된 아이템인지
             // 확인한다.
