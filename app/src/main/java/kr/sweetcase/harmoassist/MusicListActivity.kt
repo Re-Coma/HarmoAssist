@@ -1,6 +1,8 @@
 
 package kr.sweetcase.harmoassist
 
+import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -8,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -18,6 +21,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_musiclist.*
+import kr.sweetcase.harmoassist.dialogs.SelectedMusicDialog
 import kr.sweetcase.harmoassist.listMaterials.Music
 import kr.sweetcase.harmoassist.listMaterials.RecyclerDecoration
 import java.util.*
@@ -32,7 +36,7 @@ var preSelectedIdx = -1 // 이전 선택 버퍼
 class MusicListActivity :AppCompatActivity() {
 
     val music = ArrayList<Music>()
-    val context = this
+    private val activity = this
 
     // 타이틀에 대한 인덱스 찾기
     // 선택이 안되어 있다면 -1 추출
@@ -59,7 +63,10 @@ class MusicListActivity :AppCompatActivity() {
             music.add(
                 Music(
                     "곡 제목 $i",
-                    "곡 내용"
+                    "곡 내용",
+                    "C Major",
+                    180,
+                    "3/4"
                 )
             )
 
@@ -71,7 +78,7 @@ class MusicListActivity :AppCompatActivity() {
             adapter = MusicAdapter(
                 // Music Adapter 멤버변수에 선택, 이전에 선택된 인덱스추가
                 music,
-                context=context
+                activity=activity
             ) { music ->
 
                 // 선택된 인덱스 갱신
@@ -93,7 +100,7 @@ class MusicListActivity :AppCompatActivity() {
     //네트워크 시에는 별도로 하기
     class MusicAdapter(
         private val items :List<Music>,
-        private val context : Context,
+        private val activity: MusicListActivity,
         private  val clickListener: (music: Music)->Unit
     )  : RecyclerView.Adapter<MusicAdapter.MusicViewHolder>() {
 
@@ -117,39 +124,18 @@ class MusicListActivity :AppCompatActivity() {
 
         override fun getItemCount() = items.size
 
-        // TODO 클릭에 대한 상태변화 구현은 여기서
-        private fun itemClickEvent(view : View) {
-            view.setBackgroundColor(Color.BLUE)
-        }
-        private fun itemUnClickEvent(view : View) {
-            view.setBackgroundColor(Color.WHITE)
-        }
-
-        
-
         override fun onBindViewHolder(holder: MusicViewHolder, position: Int) {
             holder.binding.music = items[position]
 
-            // 새롭게 등장한 아이템이 선택된 아이템인지
-            // 확인한다.
-            if(position == selectedIdx)
-                itemClickEvent(holder.itemView)
-            else
-                itemUnClickEvent(holder.itemView)
-
             // 아이템에 대한 클릭 리스너
             holder.itemView.setOnClickListener {
-
                 clickListener.invoke(items[position])
 
-                // 일단 보이는 뷰들부터 하얀색(클릭 안됨)으로 칠함
-                for(i in 0 until parentGroup.size)
-                    itemUnClickEvent(parentGroup[i])
-                // 선택된 포지션이 selectedIdx와 일치하다면
-                // itemClickEvent 발생
-                if(position == selectedIdx)
-                    Log.d("titles", "$selectedIdx")
-                itemClickEvent(it)
+                // 곡 선택 다이얼로그 소환
+                var dialog = SelectedMusicDialog(activity, items[selectedIdx])
+                dialog.setDialog()
+                dialog.setListener()
+                dialog.show()
             }
         }
     }

@@ -10,30 +10,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp">
+    android:layout_margin="10dp"
+    android:id="@+id/list_card_view">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="20dp"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/name_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{music.title}"
-            tools:text="TITLE"/>
-
-        <TextView
-            android:id="@+id/tv_main_content"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/name_text"
-            android:layout_marginTop="10dp"
-            android:autoLink="web"
-            tools:text="Content" />
-    </RelativeLayout>
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:id="@+id/list_card_layout"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{music.title}"
+                tools:text="TITLE"/>
+
+            <TextView
+                android:id="@+id/tv_main_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:autoLink="web"
+                tools:text="Content" />
+        </LinearLayout>
+
+    </LinearLayout>
+
 
 </androidx.cardview.widget.CardView>
 </layout>
