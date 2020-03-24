@@ -7,9 +7,7 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
@@ -37,6 +35,7 @@ class MusicListActivity :AppCompatActivity() {
 
     val music = ArrayList<Music>()
     private val activity = this
+    private lateinit var toolbar : Toolbar
 
     // 타이틀에 대한 인덱스 찾기
     // 선택이 안되어 있다면 -1 추출
@@ -52,12 +51,13 @@ class MusicListActivity :AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_musiclist)
 
+        toolbar = findViewById(R.id.list_toolbar)
+        setSupportActionBar(toolbar)
+
         val spaceDecoration =
             RecyclerDecoration(1)
 
         var titleArray : ArrayList<String> = ArrayList()
-
-
 
         for (i in 0..10) {
             music.add(
@@ -97,6 +97,27 @@ class MusicListActivity :AppCompatActivity() {
         }
     }
 
+    // 상단 우측에 있는 메뉴
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        //return super.onCreateOptionsMenu(menu)
+        var menuInflater = menuInflater
+        menuInflater.inflate(R.menu.menu_on_music_list, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.add_score_section -> {
+                // TODO 여기에다가 곡 생성 액티비티 소환
+            }
+            R.id.setting_section -> {
+                // TODO 설정창
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
     //네트워크 시에는 별도로 하기
     class MusicAdapter(
         private val items :List<Music>,
@@ -119,11 +140,8 @@ class MusicListActivity :AppCompatActivity() {
             parentGroup = parent
             // 클릭 리스너
             return MusicViewHolder(ItemMusicBinding.bind(view))
-
         }
-
         override fun getItemCount() = items.size
-
         override fun onBindViewHolder(holder: MusicViewHolder, position: Int) {
             holder.binding.music = items[position]
 
@@ -131,11 +149,19 @@ class MusicListActivity :AppCompatActivity() {
             holder.itemView.setOnClickListener {
                 clickListener.invoke(items[position])
 
-                // 곡 선택 다이얼로그 소환
-                var dialog = SelectedMusicDialog(activity, items[selectedIdx])
-                dialog.setDialog()
-                dialog.setListener()
-                dialog.show()
+
+                try {
+
+                    var dialog = SelectedMusicDialog(activity, items[selectedIdx])
+                    dialog.setDialog()
+                    dialog.setListener()
+                    dialog.show()
+
+                } catch( ex : ArrayIndexOutOfBoundsException) {
+                    // 인덱스 관련 오류를 방지하기 위한 장치
+                    Log.d("Exception Error", "${ex.message}")
+                }
+
             }
         }
     }
