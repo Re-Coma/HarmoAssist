@@ -125,9 +125,10 @@ class MusicListActivity :AppCompatActivity() {
             view.setBackgroundColor(Color.WHITE)
         }
 
+        
+
         override fun onBindViewHolder(holder: MusicViewHolder, position: Int) {
             holder.binding.music = items[position]
-
 
             // 새롭게 등장한 아이템이 선택된 아이템인지
             // 확인한다.
