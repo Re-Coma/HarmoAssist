@@ -4,6 +4,7 @@ package kr.sweetcase.harmoassist
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -115,6 +116,10 @@ class MusicListActivity :AppCompatActivity() {
             }
             R.id.learning_technic_button -> {
                 // TODO 화음 테크닉 관련 창
+
+                var intent = Intent(activity, TechnicDictionaryActivity::class.java)
+                startActivity(intent)
+
             }
             R.id.about_btn -> {
                 //TODO 정보
