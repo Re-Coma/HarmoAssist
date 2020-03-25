@@ -62,6 +62,7 @@ class SelectedMusicDialog : Dialog {
         timeSignatureText.text = music.timeSignature
         chordText.text = music.chord
         summaryText.text = music.summary
+        this.window?.attributes!!.windowAnimations = R.style.ListSelectAnimation
     }
     // 리스터 세팅
     fun setListener() {

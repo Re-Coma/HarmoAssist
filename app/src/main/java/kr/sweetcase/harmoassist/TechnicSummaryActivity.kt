@@ -3,6 +3,7 @@ package kr.sweetcase.harmoassist
 import android.content.Context
 import android.content.res.AssetManager
 import android.graphics.drawable.Drawable
+import android.opengl.Matrix
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -42,6 +43,9 @@ class TechnicSummaryActivity : AppCompatActivity() {
 
             val inputStream = resources.assets.open(techInfo.imgAssetName)
             imgView.setImageDrawable(Drawable.createFromStream(inputStream, null))
+
+
+
             inputStream.close()
         } catch(a : IOException) { // 이미지가 없을 경우
             /** TODO 서버로부터 직접 받는 코드 작성 **/
