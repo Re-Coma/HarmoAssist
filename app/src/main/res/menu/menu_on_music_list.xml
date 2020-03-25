@@ -9,5 +9,13 @@
         android:id="@+id/setting_section"
         android:title="설정">
     </item>
+    <item
+        android:id="@+id/learning_technic_button"
+        android:title="Technics">
+    </item>
+    <item
+        android:id="@+id/about_btn"
+        android:title="about">
+    </item>
 
 </menu>

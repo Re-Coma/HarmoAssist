@@ -113,6 +113,12 @@ class MusicListActivity :AppCompatActivity() {
             R.id.setting_section -> {
                 // TODO 설정창
             }
+            R.id.learning_technic_button -> {
+                // TODO 화음 테크닉 관련 창
+            }
+            R.id.about_btn -> {
+                //TODO 정보
+            }
         }
 
         return super.onOptionsItemSelected(item)
