@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Point
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -37,6 +38,7 @@ class MusicListActivity :AppCompatActivity() {
     val music = ArrayList<Music>()
     private val activity = this
     private lateinit var toolbar : Toolbar
+    lateinit var windowSize : Point
 
     // 타이틀에 대한 인덱스 찾기
     // 선택이 안되어 있다면 -1 추출
@@ -59,6 +61,9 @@ class MusicListActivity :AppCompatActivity() {
             RecyclerDecoration(1)
 
         var titleArray : ArrayList<String> = ArrayList()
+        val display = windowManager.defaultDisplay
+        windowSize = Point()
+        display.getSize(windowSize)
 
         for (i in 0..10) {
             music.add(
@@ -79,7 +84,8 @@ class MusicListActivity :AppCompatActivity() {
             adapter = MusicAdapter(
                 // Music Adapter 멤버변수에 선택, 이전에 선택된 인덱스추가
                 music,
-                activity=activity
+                activity=activity,
+                windowSize = windowSize
             ) { music ->
 
                 // 선택된 인덱스 갱신
@@ -133,6 +139,7 @@ class MusicListActivity :AppCompatActivity() {
     class MusicAdapter(
         private val items :List<Music>,
         private val activity: MusicListActivity,
+        private val windowSize : Point,
         private  val clickListener: (music: Music)->Unit
     )  : RecyclerView.Adapter<MusicAdapter.MusicViewHolder>() {
 
@@ -163,7 +170,7 @@ class MusicListActivity :AppCompatActivity() {
 
                 try {
 
-                    var dialog = SelectedMusicDialog(activity, items[selectedIdx])
+                    var dialog = SelectedMusicDialog(activity, items[selectedIdx], windowSize)
                     dialog.setDialog()
                     dialog.setListener()
                     dialog.show()

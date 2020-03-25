@@ -1,18 +1,14 @@
 package kr.sweetcase.harmoassist.dialogs
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.opengl.Visibility
-import android.view.View
+import android.graphics.Point
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.annotation.VisibleForTesting
 import kr.sweetcase.harmoassist.R
 import kr.sweetcase.harmoassist.listMaterials.Music
-import org.w3c.dom.Text
 
 /**
  * 음약을 선택했을 때 뜨는 다이얼로그
@@ -26,8 +22,7 @@ class SelectedMusicDialog : Dialog {
     private var timeSignatureText : TextView
     private var chordText : TextView
     private var summaryText : TextView
-
-    private var isSummaryOpened = false
+    private var windowSize : Point
 
     private var summaryBtn : Button
     private var openBtn : Button
@@ -37,8 +32,9 @@ class SelectedMusicDialog : Dialog {
 
     private var shareImgBtn : ImageButton
 
-    constructor(context : Context, music: Music) : super(context) {
+    constructor(context : Context, music: Music, windowSize : Point) : super(context) {
         this.music = music
+        this.windowSize = windowSize
         setContentView(R.layout.selected_list_dialog)
 
         titleText = this.findViewById(R.id.selected_music_title)
@@ -63,19 +59,19 @@ class SelectedMusicDialog : Dialog {
         chordText.text = music.chord
         summaryText.text = music.summary
         this.window?.attributes!!.windowAnimations = R.style.ListSelectAnimation
+
+        /* 화면 비율 조정 */
+        window?.setLayout((windowSize.x * 0.8f).toInt(), (windowSize.y * 0.6f).toInt())
     }
     // 리스터 세팅
     fun setListener() {
 
         summaryBtn.setOnClickListener {
-            if(!isSummaryOpened) {
-                summaryText.visibility = View.VISIBLE
-                isSummaryOpened = true
-            }
-            else {
-                summaryText.visibility = View.GONE
-                isSummaryOpened = false
-            }
+
+            // 다이얼로그 삽입
+            val dialog = SelectedMusicCommentDialog(context, music.summary, windowSize)
+            dialog.show()
+
 
         }
         openBtn.setOnClickListener {
