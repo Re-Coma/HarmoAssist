@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/HarmoAssist.iml" filepath="$PROJECT_DIR$/HarmoAssist.iml" group="HarmoAssist" />
+      <module fileurl="file://$PROJECT_DIR$/app/HarmoAssist Lee-app.iml" filepath="$PROJECT_DIR$/app/HarmoAssist Lee-app.iml" group="HarmoAssist/app" />
       <module fileurl="file:///storage/harmoassistproject/HarmoAssist/app/app.iml" filepath="/storage/harmoassistproject/HarmoAssist/app/app.iml" group="HarmoAssist/app" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/620157581/harmoassistproject-HarmoAssist.iml" filepath="$PROJECT_DIR$/.idea/modules/620157581/harmoassistproject-HarmoAssist.iml" group="HarmoAssist" />
     </modules>
   </component>
 </project>

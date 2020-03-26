@@ -12,7 +12,9 @@
         <activity android:name=".TechnicSummaryActivity"></activity>
         <activity android:name=".TechnicDictionaryActivity" />
         <activity android:name=".MusicListActivity" />
+        <activity android:name=".ComboActivity" />
         <activity android:name=".MainActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
