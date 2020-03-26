@@ -85,9 +85,17 @@ class SelectedMusicDialog : Dialog {
         }
         // 분석
         statisticBtn.setOnClickListener {
+
             // TODO DB에 접속해 미디 데이터를 받고
+
             // TODO 악보 분석 페이지로 이동
+
+            // 인텐트 준비
             val intent = Intent(context, StatisticActivity::class.java)
+            // TODO DB로부터 받은 데이터를 인텐드에다 실어넣기
+            // TODO 데이터 내용: 악보 정보와 미디데이터 구조체(Midi Control Library 필요)
+            intent.putExtra("statistics_info", music)
+            this.dismiss()
             context.startActivity(intent)
         }
         // 삭제
@@ -126,8 +134,6 @@ class SelectedMusicDialog : Dialog {
             intent.type = "text/plain"
 
             // TODO 미디파일을 생성하는 코드를 작성
-
-
             intent.putExtra(Intent.EXTRA_SUBJECT, titleText.text.toString() + "mid") // TODO 실제로 미디파일 이름이 들어가야함
             intent.putExtra(Intent.EXTRA_TEXT, "extra text") // TODO 실재로 미디파일 내용이 들어가야함
 

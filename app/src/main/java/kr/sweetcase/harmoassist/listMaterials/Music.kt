@@ -1,5 +1,7 @@
 package kr.sweetcase.harmoassist.listMaterials
 
+import java.io.Serializable
+
 /**
  * 음악 정보
  * titile : 제목
@@ -15,4 +17,4 @@ data class Music(
     var summary:String,
     val chord : String,
     val tempo : Int,
-    val timeSignature : String)
+    val timeSignature : String) : Serializable
