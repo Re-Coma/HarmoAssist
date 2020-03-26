@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import kr.sweetcase.harmoassist.R
+import kr.sweetcase.harmoassist.StatisticActivity
 import kr.sweetcase.harmoassist.listMaterials.Music
 
 /**
@@ -86,6 +87,8 @@ class SelectedMusicDialog : Dialog {
         statisticBtn.setOnClickListener {
             // TODO DB에 접속해 미디 데이터를 받고
             // TODO 악보 분석 페이지로 이동
+            val intent = Intent(context, StatisticActivity::class.java)
+            context.startActivity(intent)
         }
         // 삭제
         deleteBtn.setOnClickListener {

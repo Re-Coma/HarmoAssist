@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TechnicSummaryActivity"></activity>
+        <activity android:name=".StatisticActivity"></activity>
+        <activity android:name=".MainStatisticActivity" />
+        <activity android:name=".TechnicSummaryActivity" />
         <activity android:name=".TechnicDictionaryActivity" />
         <activity android:name=".MusicListActivity" />
         <activity android:name=".MainActivity">
