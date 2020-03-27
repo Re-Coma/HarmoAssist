@@ -15,7 +15,7 @@
             android:id="@+id/list_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorControlActivated"
+            android:background="@drawable/black_card_design"
             android:minHeight="?attr/actionBarSize"
             app:titleTextColor="@color/white">
 
@@ -30,7 +30,7 @@
                 <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/colorAccent"
+                    android:background= "@drawable/black_card_design"
                     android:src="@android:drawable/ic_menu_search"
                     android:id="@+id/list_search_btn"
                     android:layout_weight="6">
@@ -44,7 +44,7 @@
                     android:id="@+id/list_search_text"
                     android:inputType="text"
                     android:textColor="@color/white"
-                    android:background="#55ffffff">
+                    android:background="@drawable/red_layout_design">
 
                 </EditText>
                 <!--
