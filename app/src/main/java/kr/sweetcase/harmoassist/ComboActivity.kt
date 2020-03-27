@@ -56,6 +56,8 @@ class ComboActivity :AppCompatActivity(){
             /*클래스 형식으로 데이터 묶어서 전달(압축형식)*/
             var myMusic = Music(music_name,music_speed,chord,beat,music_comment)
             val intent = Intent(this,AiRandomactivity::class.java)
+
+            // TODO 얘는 테스트 용으로 악보가 추가될 시 악보 액티비티로 이동
             intent.putExtra("CreateKey",myMusic)
             startActivity(intent)
             /*intent. put Extra 로 Music 클래스의 변수 myMusic을 저장*/

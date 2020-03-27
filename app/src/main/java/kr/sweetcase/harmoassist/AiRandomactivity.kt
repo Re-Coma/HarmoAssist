@@ -28,9 +28,8 @@ class AiRandomactivity: AppCompatActivity(){
                     "곡의 빠르기는 ${music?.speed} " +
                     "박자는 ${music?.beat} " +
                     "코드는 ${music?.chord} " +
-                    "코멘트는 ${music?.comment}입니다.",Toast.LENGTH_SHORT)
+                    "코멘트는 ${music?.comment}입니다.",Toast.LENGTH_SHORT).show()
         }
-
 
         /*ai 랜덤이 선택되었을 경우의 코드*/
             if (intent.hasExtra("musicKey")) {
