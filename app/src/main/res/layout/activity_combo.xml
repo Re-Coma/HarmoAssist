@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 스크롤뷰 부분(화면이 안보일 경우 스크롤 가능 -->
+<ScrollView xmlns:android = "http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools= "http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ComboActivity">
+
+    <!-- 악보 선택화면 -->
+
+
+    <!-- 제목 부분 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/all_black"
+        android:text="새 악보 생성하기"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:layout_marginBottom="5dp"/>
+
+    <!-- 입력란 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp">
+
+        <!-- 이름 부분 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:textSize="15sp"
+                android:textColor="@color/red"
+                android:gravity="center_vertical|left"
+                android:text="이름 :" />
+            <!-- 이름 입력받는 부분 -->
+            <EditText
+                android:id="@+id/edit_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:inputType="text"
+                android:padding="5dp"
+                android:hint="곡 이름을 입력하세요"
+                android:textColorHint="#59032149"
+                android:singleLine="true"
+                android:background="@drawable/spinner_background"
+                android:theme="@style/SpinnerTheme" />
+        </LinearLayout>
+
+        <!-- 빠르기 부분 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:textSize="15sp"
+                android:textColor="@color/red"
+                android:gravity="center_vertical|left"
+                android:text="빠르기 :"/>
+
+            <!-- 빠르기 입력받는 부분 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/edit_speed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner_background"
+                    android:hint="빠르기를 입력하세요"
+                    android:textColorHint="#59032149"
+                    android:inputType="number"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:padding="5dp"
+                    android:theme="@style/SpinnerTheme"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:padding="5dp"
+                    android:text="BPM"
+                    android:textColor="@color/all_black"
+                    android:layout_gravity="center_vertical|left">
+
+                </TextView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <!-- 박자 부분 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:textSize="15sp"
+                android:textColor="@color/red"
+                android:padding="5dp"
+                android:gravity="center_vertical|left"
+                android:text="박자 :" />
+
+            <Spinner
+                android:id="@+id/spinner_beat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="박자를 선택하세요"
+                android:textColorHint="#59032149"
+                android:padding="5dp"
+                android:background="@drawable/spinner_background"
+                android:theme="@style/SpinnerTheme" />
+        </LinearLayout>
+        <!-- 코드 부분 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:padding="5dp"
+                android:gravity="center_vertical|left"
+                android:text="코드 :" />
+            <!-- 코드 입력받는 부분 -->
+
+            <Spinner
+                android:id="@+id/spinner_chord"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:hint="코드를 선택하세요"
+                android:textColorHint="#59032149"
+                android:background="@drawable/spinner_background"
+                android:theme="@style/SpinnerTheme" />
+        </LinearLayout>
+        <!-- 박자 부분 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center_vertical|left"
+                android:text="코멘트 :" />
+            <!-- 박자 입력받는 부분 -->
+
+            <EditText
+                android:id="@+id/edit_comment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:hint="코멘트를 입력하세요"
+                android:textColorHint="#59032149"
+                android:background="@drawable/spinner_background"
+                android:inputType="textMultiLine"
+                android:lines ="8"
+                android:maxLines="10"
+                android:scrollbars="vertical"
+                android:singleLine="true"
+                android:theme="@style/SpinnerTheme" />
+
+            <!-- 최대 10줄 사용가능 , 코멘트 내에 스크롤바 설정 부분 -->
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 버튼 부분 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        >
+        <!-- 생성버튼 부분 -->
+        <Button
+            android:id="@+id/CreateBtn"
+            android:background="@color/red"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text ="생성"
+            android:layout_margin="5dp"/>
+        <!-- AI 랜덤 버튼 부분 -->
+        <Button
+            android:id="@+id/AI_RANDOM_Btn"
+            android:background="@color/red"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text ="AI Random"
+            android:layout_margin="5dp" />
+        <!-- 취소 버튼 부분 -->
+        <Button
+            android:id="@+id/BackBtn_from_Create"
+            android:background="@color/real_gray"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_margin="5dp"
+            android:text ="취소"/>
+
+    </LinearLayout>
+</LinearLayout>
+
+</ScrollView>

@@ -116,6 +116,9 @@ class MusicListActivity :AppCompatActivity() {
         when(item.itemId) {
             R.id.add_score_section -> {
                 // TODO 여기에다가 곡 생성 액티비티 소환
+                val intent = Intent(this,
+                    ComboActivity::class.java)
+                startActivity(intent)
             }
             R.id.setting_section -> {
                 // TODO 설정창
