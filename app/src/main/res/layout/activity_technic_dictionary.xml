@@ -24,7 +24,9 @@
     <Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent">
+        android:background="@drawable/black_edge"
+        android:minHeight="?attr/actionBarSize"
+        app:titleTextColor="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,7 +38,8 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorAccent"
+                android:background= "@drawable/black_card_design"
+                android:layout_marginEnd="5dp"
                 android:src="@android:drawable/ic_menu_search"
                 android:id="@+id/technic_search_btn"
                 android:layout_weight="6">
@@ -46,10 +49,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:id="@+id/technic_search_edit"
                 android:inputType="text"
-                android:textColor="@color/white"
-                android:background="#55ffffff">
+                android:textColor="@color/all_black"
+                android:textAlignment="center"
+                android:background="@drawable/red_layout_design"
+                android:id="@+id/technic_search_edit">
             </EditText>
 
         </LinearLayout>
@@ -69,10 +73,10 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/all_black"
+        android:background="@drawable/red_layout_design"
         android:layout_margin="10dp"
         android:text="돌아가기"
-        android:textColor="@color/white"
+        android:textColor="@color/red"
         android:id="@+id/back_btn_from_tech_list"
         android:textSize="20sp">
 

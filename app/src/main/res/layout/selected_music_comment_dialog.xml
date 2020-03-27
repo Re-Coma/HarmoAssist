@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:text="확인"
-        android:textColor="@color/white"
-        android:background="@color/all_black"
+        android:textColor="@color/all_black"
+        android:background="@drawable/black_card_design"
         android:id="@+id/comment_dialog_out_btn">
 
     </Button>

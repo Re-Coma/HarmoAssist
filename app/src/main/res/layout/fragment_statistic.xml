@@ -36,6 +36,8 @@
                     android:background="@color/real_gray">
                 </TextView>
 
+
+
                 <!-- 가장 많이 사용된 키 레이아웃 -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -51,8 +53,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textColor="@color/white"
-                            android:background="@color/red"
+                            android:textColor="@color/red"
+                            android:background="@drawable/red_edge"
                             android:textSize="15sp"
                             android:padding="5dp"
                             android:text="가장 많이 사용된 키">
@@ -147,8 +149,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textColor="@color/white"
-                            android:background="@color/red"
+                            android:textColor="@color/red"
+                            android:background="@drawable/red_edge"
                             android:textSize="15sp"
                             android:padding="5dp"
                             android:text="가장 많이 사용된 피치">

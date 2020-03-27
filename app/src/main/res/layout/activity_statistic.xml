@@ -28,8 +28,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/statistic_navi_bar"
-        app:itemTextColor="@color/white"
-        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/all_black"
+        app:itemIconTint="@color/red"
+        android:background="@drawable/black_edge"
         app:menu="@menu/statistic_bottom_menu">
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 </LinearLayout>
