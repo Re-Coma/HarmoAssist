@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/choice_ai_option"
-            android:text="Choice_ai_option"
+            android:text="Choice Option"
             android:textColor="@color/white"
             android:gravity="center_vertical|center_horizontal"
             android:textSize="30dp"

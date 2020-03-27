@@ -1,5 +1,6 @@
 package kr.sweetcase.harmoassist
 
+import android.content.Intent
 import android.graphics.Point
 import android.os.Bundle
 import android.widget.Adapter
@@ -9,9 +10,10 @@ import android.widget.Spinner
 import android.widget.SpinnerAdapter
 import kotlinx.android.synthetic.main.activity_combo.*
 import kr.sweetcase.harmoassist.dialogs.SelectedAIRandom
-
+/*
+콤보 박스 구현 및 dialog 구현 부분
+ */
 class ComboActivity :AppCompatActivity(){
-    private var activity = this
     private var windowSize = Point()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +35,33 @@ class ComboActivity :AppCompatActivity(){
 
         AI_RANDOM_Btn.setOnClickListener{
             /*AI 랜덤 버튼 눌렀을 경우*/
-            val dialog = SelectedAIRandom(activity, windowSize)
+            val dialog = SelectedAIRandom(this@ComboActivity)
+            // 팝업창 표현
             dialog.show()
+            //다이얼로그에서 버튼 눌렀을 경우 intent로 값 전달
+            dialog.spBtn.setOnClickListener{
+                var intent = Intent(this, AiRandomactivity::class.java)
+                intent.putExtra("nameKey","Chopin")
+                startActivity(intent)
+            }
+            dialog.btnBtn.setOnClickListener{
+                var intent = Intent(this, AiRandomactivity::class.java)
+                intent.putExtra("nameKey","Beethoven")
+                startActivity(intent)
+        }
+            dialog.scalBtn.setOnClickListener {
+                var intent = Intent(this, AiRandomactivity::class.java)
+                intent.putExtra("nameKey", "Scarlatti")
+                startActivity(intent)
+            }
+            dialog.balBtn.setOnClickListener{
+                var intent = Intent(this, AiRandomactivity::class.java)
+                intent.putExtra("nameKey", "ballad")
+                startActivity(intent)
+            }
+            dialog.cancleBtn.setOnClickListener{
+                dialog.dismiss()
+            }
         }
         BackBtn_from_Create.setOnClickListener{
             /*취소 버튼 눌렀을 경우 */
