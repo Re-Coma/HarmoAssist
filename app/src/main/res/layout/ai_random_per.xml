@@ -13,5 +13,5 @@
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" /> <!--텍스트 뷰의 데이터 값이 바뀌는것으로 intent 전달받는거 확인가능-->
 </androidx.constraintlayout.widget.ConstraintLayout>
