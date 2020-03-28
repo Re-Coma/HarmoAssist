@@ -119,6 +119,7 @@ class MusicListActivity :AppCompatActivity() {
                 val intent = Intent(this,
                     ComboActivity::class.java)
                 startActivity(intent)
+                overridePendingTransition(R.anim.rightin_activity_move, R.anim.rightout_activity_move)
             }
             R.id.setting_section -> {
                 // TODO 설정창

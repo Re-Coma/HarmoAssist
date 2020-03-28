@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="beat">
-        <item>박자를 선택하세요.</item>
         <item>4분의 4박자</item>
         <item>4분의 4박자</item>
         <item>4분의 3박자</item>
@@ -10,10 +9,31 @@
     </string-array>
     
     <string-array name="chord">
-        <item>코드를 선택하세요</item>
         <item>Major C</item>
-        <item>Major C#</item>
+        <item>Major Db</item>
+        <item>Major D</item>
+        <item>Major Eb</item>
+        <item>Major E</item>
+        <item>Major F</item>
+        <item>Major Gb</item>
+        <item>Major G</item>
+        <item>Major Ab</item>
+        <item>Major A</item>
+        <item>Major Bb</item>
+        <item>Major B</item>
 
+        <item>Minor C</item>
+        <item>Minor C#</item>
+        <item>Major D</item>
+        <item>Major Eb</item>
+        <item>Major E</item>
+        <item>Major F</item>
+        <item>Major F#</item>
+        <item>Major G</item>
+        <item>Major G#</item>
+        <item>Major A</item>
+        <item>Major Bb</item>
+        <item>Major B</item>
 
     </string-array>
 

@@ -16,9 +16,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity,
                 MusicListActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.nav_default_pop_enter_anim, R.anim.nav_default_pop_exit_anim)
         })
-
-        val text = findViewById<TextView>(R.id.title_text)
-
     }
 }

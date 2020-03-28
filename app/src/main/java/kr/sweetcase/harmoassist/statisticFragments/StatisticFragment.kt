@@ -1,13 +1,16 @@
 package kr.sweetcase.harmoassist.statisticFragments
 
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Point
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ScrollView
 import android.widget.Toast
 import com.github.mikephil.charting.animation.Easing
@@ -20,6 +23,7 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.ColorTemplate
 import kr.sweetcase.harmoassist.R
+import kr.sweetcase.harmoassist.dialogs.InfoDialog
 import kr.sweetcase.harmoassist.listMaterials.Music
 import java.lang.IndexOutOfBoundsException
 import java.util.Map
@@ -32,9 +36,22 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter as IndexAx
  */
 class StatisticFragment(val musicInfo : Music) : Fragment() {
 
-    lateinit var pitchChart : PieChart
-    lateinit var signatureChartMajor : HorizontalBarChart
-    lateinit var signatureChartMinor : HorizontalBarChart
+    private lateinit var pitchChart : PieChart
+    private lateinit var signatureChartMajor : HorizontalBarChart
+    private lateinit var signatureChartMinor : HorizontalBarChart
+
+
+    /** 이미지 버튼들**/
+    lateinit var summaryInfoBtn : ImageButton
+    lateinit var pitchHistogramInfoBtn : ImageButton
+    lateinit var keySignatureHistogram : ImageButton
+
+    private fun makeInfoDialog(id : Int, mainView : View) : Dialog {
+        val str = getString(id)
+        var point = Point()
+        activity?.windowManager?.defaultDisplay?.getSize(point)
+        return InfoDialog(mainView.context, str, point)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +63,22 @@ class StatisticFragment(val musicInfo : Music) : Fragment() {
         pitchChart = mainView.findViewById(R.id.pitch_chart)
         signatureChartMajor = mainView.findViewById(R.id.signature_chart_major)
         signatureChartMinor = mainView.findViewById(R.id.signature_chart_minor)
+
+        summaryInfoBtn = mainView.findViewById(R.id.statistic_summary_info_btn)
+        pitchHistogramInfoBtn = mainView.findViewById(R.id.pitch_histogram_info_btn)
+        keySignatureHistogram = mainView.findViewById(R.id.key_signature_histogram_info_btn)
+
+
+        /** 정보 관련 버튼 리스너 **/
+        summaryInfoBtn.setOnClickListener {
+            makeInfoDialog(R.string.statistic_basic_summary, mainView).show()
+        }
+        pitchHistogramInfoBtn.setOnClickListener {
+            makeInfoDialog(R.string.statistic_basic_summary, mainView).show()
+        }
+        keySignatureHistogram.setOnClickListener {
+            makeInfoDialog(R.string.statistic_basic_summary, mainView).show()
+        }
 
         /** 피치 분포도 **/
         // TODO Pitch 분포도 계산
@@ -73,6 +106,9 @@ class StatisticFragment(val musicInfo : Music) : Fragment() {
 
         signatureChartMajor.invalidate()
         signatureChartMinor.invalidate()
+
+        /** Button Listener **/
+
 
         return mainView
     }

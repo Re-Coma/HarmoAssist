@@ -25,6 +25,7 @@ class StatisticActivity : AppCompatActivity() {
     lateinit var musicInfo : Music // 외부 액티비티로부터 받을 음악 정보.\
     lateinit var selectedFragment: SelectedFragment
 
+
     // 공유버튼
     lateinit var sharedBtn : FloatingActionButton
 

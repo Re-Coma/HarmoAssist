@@ -24,17 +24,34 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- 타이틀 -->
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="요약"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:padding="5dp"
+                    android:orientation="horizontal"
                     android:background="@color/real_gray">
-                </TextView>
+
+                    <!-- 타이틀 -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="요약"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:padding="5dp"
+                        android:layout_weight="1">
+                    </TextView>
+
+                    <!-- 도움말 아이콘 -->
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/info_32_btn"
+                        android:layout_gravity="center"
+                        android:id="@+id/statistic_summary_info_btn"
+                        android:background="@color/real_gray">
+                    </ImageButton>
+                </LinearLayout>
 
 
 
@@ -235,16 +252,33 @@
                 android:layout_marginTop="15dp">
 
                 <!-- 타이틀 -->
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="Pitch Histogram"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:padding="5dp"
+                    android:orientation="horizontal"
                     android:background="@color/real_gray">
-                </TextView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="Pitch Histogram"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:padding="5dp"
+                        android:layout_weight="1">
+                    </TextView>
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/info_32_btn"
+                        android:layout_gravity="center"
+                        android:background="@color/real_gray"
+                        android:id="@+id/pitch_histogram_info_btn">
+                    </ImageButton>
+
+                </LinearLayout>
 
                 <com.github.mikephil.charting.charts.PieChart
                     android:layout_margin="15dp"
@@ -265,16 +299,33 @@
                 android:layout_marginTop="15dp">
 
                 <!-- 타이틀 -->
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="Key Signature Histogram"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:padding="5dp"
+                    android:orientation="horizontal"
                     android:background="@color/real_gray">
-                </TextView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="Key Signature Histogram"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:padding="5dp"
+                        android:layout_weight="1">
+                    </TextView>
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/info_32_btn"
+                        android:layout_gravity="center"
+                        android:background="@color/real_gray"
+                        android:id="@+id/key_signature_histogram_info_btn">
+                    </ImageButton>
+
+                </LinearLayout>
 
                 <com.github.mikephil.charting.charts.HorizontalBarChart
                     android:layout_marginTop="15dp"
