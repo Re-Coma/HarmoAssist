@@ -49,6 +49,7 @@ class StatisticActivity : AppCompatActivity() {
 
         sharedBtn = findViewById(R.id.statistic_share_btn)
 
+
         navigation.setOnNavigationItemSelectedListener {
             when(it.itemId) {
                 // 기본 정보

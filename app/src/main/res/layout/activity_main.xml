@@ -42,20 +42,18 @@
     </TextView>
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
+
         android:id="@+id/EnterButton"
-        android:background="@drawable/black_card_design"
-
-
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
         android:layout_margin="20dp"
 
         android:text="Enter"
 
-        android:textAllCaps="false"
         android:textColor="@color/all_black"
         android:textSize="22sp">
-    </Button>
+    </com.google.android.material.button.MaterialButton>
 
 </LinearLayout>

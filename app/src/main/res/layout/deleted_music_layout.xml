@@ -45,26 +45,28 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="예"
-            android:textColor="@color/red"
-            android:background="@drawable/red_layout_design"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/red"
             android:layout_margin="10dp"
             android:id="@+id/yes_delete_btn"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:outlineAmbientShadowColor="@color/real_gray">
 
-        </Button>
+        </com.google.android.material.button.MaterialButton>
         <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="아니오"
-            android:background="@drawable/black_card_design"
-            android:textColor="@color/all_black"
+            android:backgroundTint="@color/real_gray"
+            android:textColor="@color/white"
             android:layout_margin="10dp"
             android:id="@+id/no_delete_btn"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:outlineAmbientShadowColor="@color/real_gray">
 
         </Button>
 

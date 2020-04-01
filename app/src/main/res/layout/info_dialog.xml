@@ -10,16 +10,16 @@
         android:layout_margin="10dp">
 
     </TextView>
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:text="확인"
-        android:textColor="@color/all_black"
-        android:background="@drawable/black_card_design"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/real_gray"
         android:id="@+id/info_ok_btn">
 
-    </Button>
+    </com.google.android.material.button.MaterialButton>
 
 </LinearLayout>

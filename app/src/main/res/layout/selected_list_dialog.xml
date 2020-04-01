@@ -140,17 +140,17 @@
 
         </LinearLayout>
         <!-- 코멘트 보는 버튼 -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/red_layout_design"
+            android:backgroundTint="@color/red"
             android:text="코멘트 보기"
             android:textSize="20dp"
-            android:textColor="@color/all_black"
+            android:textColor="@color/white"
             android:layout_marginBottom="10dp"
             android:id="@+id/selected_music_comment_btn">
 
-        </Button>
+        </com.google.android.material.button.MaterialButton>
 
         <TextView
             android:layout_width="match_parent"
@@ -161,17 +161,16 @@
         </TextView>
 
         <!-- 분석 버튼 -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/gray_crad_design"
+            android:backgroundTint="@color/red"
             android:text="분석하기"
             android:textSize="20dp"
-            android:textColor="@color/gray"
-            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
             android:id="@+id/selected_music_statistic_btn">
 
-        </Button>
+        </com.google.android.material.button.MaterialButton>
 
         <!-- 열기 또는 취소 버튼 -->
 
@@ -181,41 +180,41 @@
             android:orientation="horizontal"
             android:layout_marginTop="5dp">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@drawable/black_card_design"
+                android:backgroundTint="@color/red"
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:textSize="20dp"
-                android:textColor="@color/all_black"
+                android:textColor="@color/white"
                 android:text="열기"
                 android:id="@+id/selected_music_open_btn">
 
-            </Button>
+            </com.google.android.material.button.MaterialButton>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@drawable/black_card_design"
+                android:backgroundTint="@color/red"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:textSize="20dp"
                 android:layout_weight="1"
-                android:textColor="@color/all_black"
+                android:textColor="@color/white"
                 android:text="취소"
                 android:id="@+id/selected_music_close_btn">
 
-            </Button>
+            </com.google.android.material.button.MaterialButton>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@drawable/red_layout_design"
+                android:backgroundTint="@color/real_gray"
                 android:layout_marginLeft="5dp"
                 android:textSize="20dp"
                 android:layout_weight="1"
-                android:textColor="@color/red"
+                android:textColor="@color/white"
                 android:text="삭제"
                 android:id="@+id/selected_music_delete_btn"/>
 
