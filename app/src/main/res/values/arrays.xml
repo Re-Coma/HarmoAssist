@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="beat">
-        <item>4분의 4박자</item>
-        <item>4분의 4박자</item>
+        <item>4분의 2박자</item>
         <item>4분의 3박자</item>
+        <item>4분의 4박자</item>
         <item>8분의 3박자</item>
         <item>8분의 6박자</item>
     </string-array>

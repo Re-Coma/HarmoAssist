@@ -17,9 +17,9 @@
 
     <string-array name="ai_option_arr">
         <item>클래식-쇼팽</item>
-        <item>클래식-스칼래티</item>
-        <item>클래식-베토벤</item>
         <item>클래식-바흐</item>
+        <item>클래식-베토벤</item>
+        <item>클래식-스칼래티</item>
         <item>발라드</item>
         <item>뉴에이지</item>
     </string-array>

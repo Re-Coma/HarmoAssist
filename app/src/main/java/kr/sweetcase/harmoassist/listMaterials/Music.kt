@@ -14,7 +14,28 @@ import java.io.Serializable
  */
 data class Music(
     val title: String,
-    var summary:String,
+    var summary:String?,
     val chord : String,
     val tempo : Int,
-    val timeSignature : String) : Serializable
+    val timeSignature : String) : Serializable {
+
+    // 빌더패턴
+    class Builder {
+        private lateinit var title : String
+        private var summary: String? = null
+        private lateinit var chord : String
+        private var tempo : Int = 0
+        private lateinit var timeSignature : String
+
+        fun getTitle(title : String) : Builder { this.title = title; return this }
+        fun getSummary(summary : String?) : Builder { this.summary = summary; return this }
+        fun getChord(chord : String) : Builder { this.chord = chord; return this }
+        fun getTempo(tempo : Int) : Builder { this.tempo = tempo; return this }
+        fun getTimeSignature(timeSignature : String ) : Builder { this.timeSignature = timeSignature; return this }
+
+        fun build() : Music {
+            return Music(title, summary, chord, tempo, timeSignature)
+        }
+    }
+
+}

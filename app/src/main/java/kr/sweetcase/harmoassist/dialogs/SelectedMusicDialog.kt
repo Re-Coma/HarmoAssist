@@ -7,6 +7,7 @@ import android.graphics.Point
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import kr.sweetcase.harmoassist.R
 import kr.sweetcase.harmoassist.StatisticActivity
 import kr.sweetcase.harmoassist.listMaterials.Music
@@ -69,10 +70,14 @@ class SelectedMusicDialog : Dialog {
 
         summaryBtn.setOnClickListener {
 
-            // 다이얼로그 삽입
-            val dialog = SelectedMusicCommentDialog(context, music.summary, windowSize)
-            dialog.show()
-
+            if(music.summary != null) {
+                // 다이얼로그 삽입
+                val dialog = SelectedMusicCommentDialog(context, music.summary!!, windowSize)
+                dialog.show()
+            }
+            else {
+                Toast.makeText(this.context, "등록된 설명이 없습니다.", Toast.LENGTH_SHORT).show()
+            }
 
         }
         openBtn.setOnClickListener {
