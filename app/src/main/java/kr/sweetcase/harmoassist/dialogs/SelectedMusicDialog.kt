@@ -1,5 +1,6 @@
 package kr.sweetcase.harmoassist.dialogs
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -8,7 +9,9 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import kr.sweetcase.harmoassist.MakeSheetType
 import kr.sweetcase.harmoassist.R
+import kr.sweetcase.harmoassist.SheetRedirectionActivity
 import kr.sweetcase.harmoassist.StatisticActivity
 import kr.sweetcase.harmoassist.listMaterials.Music
 
@@ -17,6 +20,7 @@ import kr.sweetcase.harmoassist.listMaterials.Music
  */
 class SelectedMusicDialog : Dialog {
 
+    private var activity : Activity
 
     private var music : Music
     private var titleText : TextView
@@ -34,9 +38,10 @@ class SelectedMusicDialog : Dialog {
 
     private var shareImgBtn : ImageButton
 
-    constructor(context : Context, music: Music, windowSize : Point) : super(context) {
+    constructor(activity : Activity, music: Music, windowSize : Point) : super(activity) {
         this.music = music
         this.windowSize = windowSize
+        this.activity = activity
         setContentView(R.layout.selected_list_dialog)
 
         titleText = this.findViewById(R.id.selected_music_title)
@@ -81,8 +86,15 @@ class SelectedMusicDialog : Dialog {
 
         }
         openBtn.setOnClickListener {
-            // TODO 데이터를 이용해 악보 인터페이스로 접근
-            // TODO 그러므로 악보 인터페이스 관련 함수가 여기 들어가야함
+            //intent 데이터 담기
+            val enterIntent = Intent(this.activity, SheetRedirectionActivity::class.java)
+            enterIntent.putExtra("type", MakeSheetType.CURRENT.key)
+            enterIntent.putExtra(MakeSheetType.CURRENT.intentKeys[0], music)
+
+            // 악보를 준비하는 리다이렉션 액티비티
+            activity.startActivity(enterIntent)
+            activity.overridePendingTransition(R.anim.rightin_activity_move, R.anim.rightout_activity_move)
+            this.dismiss()
         }
         // 닫기
         closeBtn.setOnClickListener {

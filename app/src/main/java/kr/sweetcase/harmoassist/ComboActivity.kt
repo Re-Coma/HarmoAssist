@@ -1,10 +1,13 @@
 package kr.sweetcase.harmoassist
 
+import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_combo.*
@@ -36,7 +39,7 @@ class ComboActivity :AppCompatActivity(){
     var hasComment = false
 
     // 데이터 유효성
-    var compeleted = false
+    var completed = false
 
     // 스피너 리스너들
 
@@ -79,7 +82,6 @@ class ComboActivity :AppCompatActivity(){
         }
 
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -147,9 +149,22 @@ class ComboActivity :AppCompatActivity(){
                 }
                 else -> {
                     newTempo = edit_speed.text.toString().toInt()
-                    compeleted = true
+                    completed = true
                 }
             }
+
+            //3. 노트사이즈 유효성 검토(AI 동작에 한에서만)
+            if(aiSelected) {
+                when {
+                    note_size_text.text.toString().isEmpty() -> {
+                        note_size_text.hint = "노트 갯수를 입력하세요"
+                        note_size_text.setHintTextColor(ContextCompat.getColor(this, R.color.red))
+                        completed = false
+                    }
+                    else -> completed = true
+                }
+            }
+
 
             // 나머지 두개는 콤보박스에서 자동 설정
 
@@ -163,7 +178,7 @@ class ComboActivity :AppCompatActivity(){
                 newComment = null
             }
 
-            if(compeleted) {
+            if(completed) {
                 // 데이터 생성
                 val newMusic = Music.Builder()
                     .getChord(newChordString)
@@ -179,8 +194,13 @@ class ComboActivity :AppCompatActivity(){
 
                 // TODO 얘는 테스트 용으로 악보가 추가될 시 악보 액티비티로 이동
                 // AI작동 여부 세팅
-                if(aiSelected)
+                if(aiSelected) {
                     enterIntent.putExtra("ai option", aiSelectedPos)
+                    enterIntent.putExtra("note size", note_size_text.text.toString().toInt())
+                    enterIntent.putExtra("type", MakeSheetType.NEW_AI.key)
+                } else {
+                    enterIntent.putExtra("type", MakeSheetType.NEW.key)
+                }
 
                 // TODO 악보 인터페이스로 이동하되
                 // TODO AI를 선택한 경우 빈 악보로 생성하면 안됨
@@ -192,13 +212,13 @@ class ComboActivity :AppCompatActivity(){
         AI_RANDOM_Btn.setOnClickListener {
             if(aiSelected) {
                 aiSelected = false
-                aiOptionSpinner.visibility = View.VISIBLE
-                it.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
+                ai_option_layer.visibility = View.GONE
+                it.setBackgroundColor(ContextCompat.getColor(this, R.color.real_gray))
             }
             else {
                 aiSelected = true
-                aiOptionSpinner.visibility = View.GONE
-                it.setBackgroundColor(ContextCompat.getColor(this, R.color.real_gray))
+                ai_option_layer.visibility = View.VISIBLE
+                it.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
             }
         }
     }
