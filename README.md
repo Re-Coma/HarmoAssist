@@ -46,7 +46,7 @@
 # Systems
 ### 전체 구성도
 * !커뮤니티 서버는 확장구현이 확정될 때 구현 예정
-![main image](readme_img/structure.png)
+![main image](https://hjhr-readme.s3.ap-northeast-2.amazonaws.com/sysstructfinal.png)
 * * *
 * * *
 
