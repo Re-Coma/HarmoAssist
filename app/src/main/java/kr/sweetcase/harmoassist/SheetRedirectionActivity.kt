@@ -13,6 +13,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kr.sweetcase.harmoassist.listMaterials.Music
+import kr.sweetcase.harmoassist.modules.AIConnectionModule.AIClientTask
 
 // TODO 여기에서 악보 인터페이스로 들어가는 코드 작성하면 됨.
 
@@ -64,6 +65,20 @@ class SheetRedirectionActivity : AppCompatActivity() {
                     musicInfoData = intent.extras?.getSerializable(MakeSheetType.NEW_AI.intentKeys[0]) as Music
                     val aiOptionStr = intent.extras?.getString(MakeSheetType.NEW_AI.intentKeys[1])
                     val noteSize = intent.extras?.getInt(MakeSheetType.NEW_AI.intentKeys[2])
+
+                    // TODO DB에서 서버와 관련된 정보를 불러온다. (이거는 나중에 구현)
+
+                    // 서버 접속
+                    val clientConnection = AIClientTask.Builder()
+                        .setContext(this)
+                        .setHost("sweetcase.tk")
+                        .setPort(7890)
+                        .setPswd("1111")
+                        .setSerial("avbk2#$@skd#%")
+                        .build()
+
+                    // 연결 시도
+                    clientConnection.connect()
 
                     // TODO 서버에 접속해서 딥러닝을 수행한 다음
                     // TODO 수행된 딥러닝 데이터 배열을

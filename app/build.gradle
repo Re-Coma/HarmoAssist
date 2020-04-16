@@ -6,6 +6,11 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
+    packagingOptions {
+        exclude 'META-INF/io.netty.versions.properties'
+        exclude 'META-INF/INDEX.LIST'
+    }
+
     defaultConfig {
         applicationId "kr.sweetcase.harmoassist"
         minSdkVersion 24
@@ -39,9 +44,6 @@ android {
     repositories {
         maven { url 'https://jitpack.io' }
     }
-
-// To inline the bytecode built with JVM target 1.8 into
-// bytecode that is being built with JVM target 1.6. (e.g. navArgs)
 
 }
 

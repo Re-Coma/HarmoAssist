@@ -4,6 +4,7 @@ import kr.sweetcase.harmoassist.modules.AIConnectionModule.DataModel
 
 class RequestData : DataModel() {
 
-    override fun makeToJson() {
+    override fun makeToJson() : String {
+        return ""
     }
 }
