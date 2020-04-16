@@ -72,8 +72,9 @@ class SheetRedirectionActivity : AppCompatActivity() {
                     Toast.makeText(this, "$noteSize", Toast.LENGTH_LONG).show()
                 }
             }
-            // TODO 데이터가 준비가 다 되었다면 여기서 악보 인터페이스 액티비티로 전환
+
         }
+        // TODO 데이터가 준비가 다 되었다면 여기서 악보 인터페이스 액티비티로 전환
     }
 
     // TODO 뒤로 가기 버튼을 눌렀을 경우

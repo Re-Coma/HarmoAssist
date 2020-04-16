@@ -62,4 +62,5 @@ dependencies {
     implementation "androidx.cardview:cardview:1.0.0"
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.github.fabriciorod:material-buttons:1.2'
+    implementation 'io.lettuce:lettuce-core:5.2.2.RELEASE'
 }
