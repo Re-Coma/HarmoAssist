@@ -2,7 +2,9 @@ package kr.sweetcase.harmoassist.modules.AIConnectionModule
 
 import android.content.Context
 import android.net.Uri
+import android.os.AsyncTask
 import io.lettuce.core.RedisClient
+import io.lettuce.core.RedisConnectionException
 import io.lettuce.core.RedisURI
 import kr.sweetcase.harmoassist.modules.AIConnectionModule.labels.ConnectionData
 import kr.sweetcase.harmoassist.modules.AIConnectionModule.labels.RedisClientData
@@ -15,6 +17,7 @@ class AIClientTask {
     var serverInfo : RedisServerData
     var clientInfo: RedisClientData
     var connected : Boolean = false
+    var key : Int? = null
 
     // Static Value
     companion object {
@@ -77,9 +80,42 @@ class AIClientTask {
             // 연결 요청 Json 송신
             val requestConnectJson
                     = ConnectionData(this.clientInfo.myIP, this.serverInfo.serial).makeToJson()
-            connection.publish(AIClientTask.SERVER_CHANNEL, requestConnectJson)
 
-            // 응답이 올 때 까지 Sub으로 대기
+            // Redis Server가 IPMap을 만들지 않았을 때 0L를 호출한다.
+            if(connection.publish(AIClientTask.SERVER_CHANNEL, requestConnectJson) == 0L) {
+                throw RedisConnectionException("서버에 응답이 없습니다.")
+            }
+
+            var connectLimitCounter = 0
+            val connectLimit = 10
+
+            // 서버로부터 키를 받음
+
+            while(connectLimitCounter < connectLimit) {
+                var rawKey = connection.hget(SERVER_CHANNEL, this.clientInfo.myIP)
+
+                if(rawKey != null) {
+                    try {
+                        this.key = rawKey as Int
+                    } catch (e : TypeCastException) {
+                        // 서버로부터 잘못된 값이 생성
+                        // TODO 서버 문제 관련 문제를 관리자에게 송신할 프로세스를 생성
+                        throw e
+                    }
+                    this.connected = true
+                    break
+                }
+                else {
+                    // 다시 받을 때 까지 기다림
+                    Thread.sleep(1000L)
+                    connectLimitCounter++
+                }
+            }
+            // 서버 연결에 실패
+            if(!this.connected) {
+                throw RedisConnectionException("서버가 응답이 없습니다.")
+            }
+
 
             this.connected = true
         } catch(e : Exception) {

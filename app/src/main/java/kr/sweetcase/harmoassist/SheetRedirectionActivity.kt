@@ -3,17 +3,21 @@ package kr.sweetcase.harmoassist
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.ProgressDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import io.lettuce.core.RedisConnectionException
+import kotlinx.android.synthetic.main.activity_sheet_redirection.*
+import kotlinx.coroutines.*
 import kr.sweetcase.harmoassist.listMaterials.Music
 import kr.sweetcase.harmoassist.modules.AIConnectionModule.AIClientTask
+import kotlin.coroutines.CoroutineContext
 
 // TODO 여기에서 악보 인터페이스로 들어가는 코드 작성하면 됨.
 
@@ -25,17 +29,24 @@ import kr.sweetcase.harmoassist.modules.AIConnectionModule.AIClientTask
  *
  * 인텐트 파라미터는 MakeSheetType 참고
  */
-class SheetRedirectionActivity : AppCompatActivity() {
+class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
 
     private var backKeyClickTime : Long = 0
     private lateinit var musicInfoData : Music
+    private var type : String? = null
+    private var context : Context = this
+
+    // task
+    private lateinit var mJob : Job
+    override val coroutineContext: CoroutineContext
+        get() = mJob + Dispatchers.Main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sheet_redirection)
 
         // 타입 확인
-        val type = intent.extras?.getString("type")
+        type = intent.extras?.getString("type")
 
         if(type != null) {
             when(type) {
@@ -62,34 +73,57 @@ class SheetRedirectionActivity : AppCompatActivity() {
                 MakeSheetType.NEW_AI.key -> {
 
                     // intent 데이터 추출
-                    musicInfoData = intent.extras?.getSerializable(MakeSheetType.NEW_AI.intentKeys[0]) as Music
-                    val aiOptionStr = intent.extras?.getString(MakeSheetType.NEW_AI.intentKeys[1])
-                    val noteSize = intent.extras?.getInt(MakeSheetType.NEW_AI.intentKeys[2])
+                    mJob = Job()
 
-                    // TODO DB에서 서버와 관련된 정보를 불러온다. (이거는 나중에 구현)
+                    // dialogBuilder
+                    val dialogBuilder = AlertDialog.Builder(this@SheetRedirectionActivity)
 
-                    // 서버 접속
-                    val clientConnection = AIClientTask.Builder()
-                        .setContext(this)
-                        .setHost("sweetcase.tk")
-                        .setPort(7890)
-                        .setPswd("1111")
-                        .setSerial("avbk2#$@skd#%")
-                        .build()
 
-                    // 연결 시도
-                    clientConnection.connect()
+                    // 예외 핸들러
+                    val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
 
+                        // TODO 나중에 타입에 따라 다르게 설정해야 할 필요가 있음
+                        val alert = dialogBuilder
+                            .setTitle("ERROR")
+                            .setMessage(throwable.message.toString())
+                            .setPositiveButton("확인", DialogInterface.OnClickListener {
+                                dialog, _ ->
+                                dialog.dismiss()
+                                finish()
+                            })
+                            .create()
+                        alert.show()
+                    }
+
+                    launch(exceptionHandler) {
+                        val deferred = async(Dispatchers.Default) {
+                            musicInfoData = intent.extras?.getSerializable(MakeSheetType.NEW_AI.intentKeys[0]) as Music
+                            val aiOptionStr = intent.extras?.getString(MakeSheetType.NEW_AI.intentKeys[1])
+                            val noteSize = intent.extras?.getInt(MakeSheetType.NEW_AI.intentKeys[2])
+
+                            // TODO DB에서 서버와 관련된 정보를 불러온다. (이거는 나중에 구현)
+
+                            // text 변경
+                            loading_test.text = "서버 연결 중.."
+
+                            // 서버 접속
+                            val clientConnection = AIClientTask.Builder()
+                                .setContext(context)
+                                .setHost("sweetcase.tk")
+                                .setPort(7890)
+                                .setPswd("4680")
+                                .setSerial("avbk2#$@skd#%")
+                                .build()
+                            clientConnection.connect()
+                        }
+                        deferred.await()
+                    }
                     // TODO 서버에 접속해서 딥러닝을 수행한 다음
                     // TODO 수행된 딥러닝 데이터 배열을
                     // TODO Midi Library에 저장해야 한다.
-
-                    Toast.makeText(this, "$noteSize", Toast.LENGTH_LONG).show()
                 }
             }
-
         }
-        // TODO 데이터가 준비가 다 되었다면 여기서 악보 인터페이스 액티비티로 전환
     }
 
     // TODO 뒤로 가기 버튼을 눌렀을 경우
@@ -103,4 +137,10 @@ class SheetRedirectionActivity : AppCompatActivity() {
             super.onBackPressed()
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mJob.cancel()
+    }
+
 }
