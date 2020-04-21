@@ -3,12 +3,14 @@ package kr.sweetcase.harmoassist.modules.AIConnectionModule
 import android.content.Context
 import android.net.Uri
 import android.os.AsyncTask
+import android.util.Log
 import io.lettuce.core.RedisClient
 import io.lettuce.core.RedisConnectionException
 import io.lettuce.core.RedisURI
 import kr.sweetcase.harmoassist.modules.AIConnectionModule.labels.ConnectionData
 import kr.sweetcase.harmoassist.modules.AIConnectionModule.labels.RedisClientData
 import kr.sweetcase.harmoassist.modules.AIConnectionModule.labels.RedisServerData
+import kr.sweetcase.harmoassist.modules.AIConnectionModule.labels.RequestData
 import java.net.ConnectException
 
 // AI 수행 클라이언트 클래스
@@ -17,11 +19,12 @@ class AIClientTask {
     var serverInfo : RedisServerData
     var clientInfo: RedisClientData
     var connected : Boolean = false
-    var key : Int? = null
+    var key : String? = null
 
     // Static Value
     companion object {
         const val SERVER_CHANNEL = "DeepServerPipe"
+        const val IPMAP = "IPMap"
     }
 
     private constructor(connections : RedisClient, serverInfo : RedisServerData, clientInfo : RedisClientData) {
@@ -82,7 +85,7 @@ class AIClientTask {
                     = ConnectionData(this.clientInfo.myIP, this.serverInfo.serial).makeToJson()
 
             // Redis Server가 IPMap을 만들지 않았을 때 0L를 호출한다.
-            if(connection.publish(AIClientTask.SERVER_CHANNEL, requestConnectJson) == 0L) {
+            if(connection.publish(SERVER_CHANNEL, requestConnectJson) == 0L) {
                 throw RedisConnectionException("서버에 응답이 없습니다.")
             }
 
@@ -92,17 +95,18 @@ class AIClientTask {
             // 서버로부터 키를 받음
 
             while(connectLimitCounter < connectLimit) {
-                var rawKey = connection.hget(SERVER_CHANNEL, this.clientInfo.myIP)
-
+                var rawKey = connection.hget(IPMAP, this.clientInfo.myIP)
                 if(rawKey != null) {
                     try {
-                        this.key = rawKey as Int
+                        this.key = rawKey
+
                     } catch (e : TypeCastException) {
                         // 서버로부터 잘못된 값이 생성
                         // TODO 서버 문제 관련 문제를 관리자에게 송신할 프로세스를 생성
                         throw e
                     }
                     this.connected = true
+
                     break
                 }
                 else {
@@ -114,11 +118,12 @@ class AIClientTask {
             // 서버 연결에 실패
             if(!this.connected) {
                 throw RedisConnectionException("서버가 응답이 없습니다.")
+            } else {
+                this.connected = true
             }
 
-
-            this.connected = true
         } catch(e : Exception) {
+            // TODO 연결 실패에 대한 후처리
             throw e
         }
     }
@@ -127,8 +132,44 @@ class AIClientTask {
         if(!this.connected) {
             throw ConnectException("aleady disconnected")
         }
+        try {
+            // 연결 해제 요청
+            val connection = this.conn.connectPubSub().sync()
+            val requestDisconnectJson =
+                ConnectionData(this.clientInfo.myIP, this.serverInfo.serial, false).makeToJson()
+
+            // Redis Server가 IPMap을 만들지 않았을 때 0L를 호출한다.
+            if(connection.publish(SERVER_CHANNEL, requestDisconnectJson) == 0L) {
+                throw RedisConnectionException("서버에 응답이 없습니다.")
+            }
+
+            Log.d("reidscontrol", connection.unsubscribe(this.key).toString())
+
+            // SubScribe 해제
+        } catch(e : Exception) {
+            throw e
+        }
         this.conn.shutdown()
         this.connected = false
     }
 
+    // 딥러닝 요청 데이터 전송
+    // TODO 원래 리턴값은 데이터 모델
+    fun sendRequestData(requestData : RequestData) {
+        if(!this.connected) {
+            throw ConnectException("aleady disconnected")
+        }
+        try {
+            val connection = this.conn.connectPubSub().sync()
+            if(connection.publish(SERVER_CHANNEL, requestData.makeToJson()) == 0L) {
+                throw RedisConnectionException("서버에 응답이 없습니다.")
+            }
+
+            // TODO Subscribe 해결
+
+        } catch (e : Exception) {
+            // TODO 예외처리
+            throw e
+        }
+    }
 }

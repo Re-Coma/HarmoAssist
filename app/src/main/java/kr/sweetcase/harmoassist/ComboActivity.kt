@@ -21,12 +21,12 @@ class ComboActivity :AppCompatActivity(){
     private var aiSelected = false //ai 옵션 설정 여부
     // ai 옵션 리스트
     var selectedAIOptionList = arrayOf<String>(
-        "chopin",
-        "bach",
-        "beethoven",
-        "scarlatti",
-        "balad",
-        "new age"
+        "CHOPIN",
+        "BACH",
+        "BEETHOVEN",
+        "SCARLATTI",
+        "BALAD",
+        "NEW_AGE"
     )
     // 선택된 ai 인덱스
     private var aiSelectedPos = -1
@@ -195,7 +195,7 @@ class ComboActivity :AppCompatActivity(){
                 // TODO 얘는 테스트 용으로 악보가 추가될 시 악보 액티비티로 이동
                 // AI작동 여부 세팅
                 if(aiSelected) {
-                    enterIntent.putExtra("ai option", aiSelectedPos)
+                    enterIntent.putExtra("ai option", selectedAIOptionList[aiSelectedPos])
                     enterIntent.putExtra("note size", note_size_text.text.toString().toInt())
                     enterIntent.putExtra("type", MakeSheetType.NEW_AI.key)
                 } else {

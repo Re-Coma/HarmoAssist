@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_sheet_redirection.*
 import kotlinx.coroutines.*
 import kr.sweetcase.harmoassist.listMaterials.Music
 import kr.sweetcase.harmoassist.modules.AIConnectionModule.AIClientTask
+import kr.sweetcase.harmoassist.modules.AIConnectionModule.labels.RequestData
 import kotlin.coroutines.CoroutineContext
 
 // TODO 여기에서 악보 인터페이스로 들어가는 코드 작성하면 됨.
@@ -35,6 +36,8 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var musicInfoData : Music
     private var type : String? = null
     private var context : Context = this
+
+    private var clientConnection: AIClientTask? = null
 
     // task
     private lateinit var mJob : Job
@@ -101,26 +104,50 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
                             val aiOptionStr = intent.extras?.getString(MakeSheetType.NEW_AI.intentKeys[1])
                             val noteSize = intent.extras?.getInt(MakeSheetType.NEW_AI.intentKeys[2])
 
-                            // TODO DB에서 서버와 관련된 정보를 불러온다. (이거는 나중에 구현)
-
                             // text 변경
                             loading_test.text = "서버 연결 중.."
 
                             // 서버 접속
-                            val clientConnection = AIClientTask.Builder()
+                            clientConnection = AIClientTask.Builder()
                                 .setContext(context)
                                 .setHost("sweetcase.tk")
                                 .setPort(7890)
                                 .setPswd("4680")
                                 .setSerial("avbk2#$@skd#%")
                                 .build()
-                            clientConnection.connect()
+                            clientConnection?.connect()
+
+                            // 서버 접속 확인
+                            if(clientConnection!!.connected) {
+                                loading_test.text = "요청 데이터 송신중"
+
+                                // TODO 서버에 딥러닝 요청 데이터 전송 및 수신
+                                val requestJson = RequestData(
+                                    clientConnection?.clientInfo!!.myIP,
+                                    aiOptionStr,
+                                    musicInfoData.timeSignature,
+                                    noteSize
+                                )
+                                clientConnection?.sendRequestData(requestJson)
+
+                                // TODO 데이터 나열(알고리즘 구현)
+
+                                // TODO 반주 생성
+
+                                // TODO 서버 연결 끊기
+                                loading_test.text = "서버와의 연결을 끊는 중"
+                                clientConnection?.disconnect()
+
+                                // TODO DB에 저장
+                                loading_test.text = "데이터베이스에 저장중"
+
+                                // TODO 악보 인터페이스 실행
+                            } else {
+                                throw Exception("서버와의 연결에 실패했습니다.")
+                            }
                         }
                         deferred.await()
                     }
-                    // TODO 서버에 접속해서 딥러닝을 수행한 다음
-                    // TODO 수행된 딥러닝 데이터 배열을
-                    // TODO Midi Library에 저장해야 한다.
                 }
             }
         }
@@ -134,6 +161,7 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
         } else {
             // TODO 상황 정리
             // 종료
+            mJob.cancel()
             super.onBackPressed()
         }
     }
@@ -141,6 +169,11 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
     override fun onDestroy() {
         super.onDestroy()
         mJob.cancel()
+        if(this.clientConnection != null) {
+            if(this.clientConnection!!.connected) {
+                this.clientConnection!!.conn.shutdown()
+            }
+        }
     }
 
 }
