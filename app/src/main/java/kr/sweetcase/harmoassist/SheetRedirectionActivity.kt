@@ -3,16 +3,22 @@ package kr.sweetcase.harmoassist
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.ProgressDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import io.lettuce.core.RedisConnectionException
+import kotlinx.android.synthetic.main.activity_sheet_redirection.*
+import kotlinx.coroutines.*
 import kr.sweetcase.harmoassist.listMaterials.Music
+import kr.sweetcase.harmoassist.modules.AIConnectionModule.AIClientTask
+import kr.sweetcase.harmoassist.modules.AIConnectionModule.labels.RequestData
+import kotlin.coroutines.CoroutineContext
 
 // TODO 여기에서 악보 인터페이스로 들어가는 코드 작성하면 됨.
 
@@ -24,17 +30,26 @@ import kr.sweetcase.harmoassist.listMaterials.Music
  *
  * 인텐트 파라미터는 MakeSheetType 참고
  */
-class SheetRedirectionActivity : AppCompatActivity() {
+class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
 
     private var backKeyClickTime : Long = 0
     private lateinit var musicInfoData : Music
+    private var type : String? = null
+    private var context : Context = this
+
+    private var clientConnection: AIClientTask? = null
+
+    // task
+    private lateinit var mJob : Job
+    override val coroutineContext: CoroutineContext
+        get() = mJob + Dispatchers.Main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sheet_redirection)
 
         // 타입 확인
-        val type = intent.extras?.getString("type")
+        type = intent.extras?.getString("type")
 
         if(type != null) {
             when(type) {
@@ -61,18 +76,80 @@ class SheetRedirectionActivity : AppCompatActivity() {
                 MakeSheetType.NEW_AI.key -> {
 
                     // intent 데이터 추출
-                    musicInfoData = intent.extras?.getSerializable(MakeSheetType.NEW_AI.intentKeys[0]) as Music
-                    val aiOptionStr = intent.extras?.getString(MakeSheetType.NEW_AI.intentKeys[1])
-                    val noteSize = intent.extras?.getInt(MakeSheetType.NEW_AI.intentKeys[2])
+                    mJob = Job()
 
-                    // TODO 서버에 접속해서 딥러닝을 수행한 다음
-                    // TODO 수행된 딥러닝 데이터 배열을
-                    // TODO Midi Library에 저장해야 한다.
+                    // dialogBuilder
+                    val dialogBuilder = AlertDialog.Builder(this@SheetRedirectionActivity)
 
-                    Toast.makeText(this, "$noteSize", Toast.LENGTH_LONG).show()
+
+                    // 예외 핸들러
+                    val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+
+                        // TODO 나중에 타입에 따라 다르게 설정해야 할 필요가 있음
+                        val alert = dialogBuilder
+                            .setTitle("ERROR")
+                            .setMessage(throwable.message.toString())
+                            .setPositiveButton("확인", DialogInterface.OnClickListener {
+                                dialog, _ ->
+                                dialog.dismiss()
+                                finish()
+                            })
+                            .create()
+                        alert.show()
+                    }
+
+                    launch(exceptionHandler) {
+                        val deferred = async(Dispatchers.Default) {
+                            musicInfoData = intent.extras?.getSerializable(MakeSheetType.NEW_AI.intentKeys[0]) as Music
+                            val aiOptionStr = intent.extras?.getString(MakeSheetType.NEW_AI.intentKeys[1])
+                            val noteSize = intent.extras?.getInt(MakeSheetType.NEW_AI.intentKeys[2])
+
+                            // text 변경
+                            loading_test.text = "서버 연결 중.."
+
+                            // 서버 접속
+                            clientConnection = AIClientTask.Builder()
+                                .setContext(context)
+                                .setHost("sweetcase.tk")
+                                .setPort(7890)
+                                .setPswd("4680")
+                                .setSerial("avbk2#$@skd#%")
+                                .build()
+                            clientConnection?.connect()
+
+                            // 서버 접속 확인
+                            if(clientConnection!!.connected) {
+                                loading_test.text = "요청 데이터 송신중"
+
+                                // TODO 서버에 딥러닝 요청 데이터 전송 및 수신
+                                val requestJson = RequestData(
+                                    clientConnection?.clientInfo!!.myIP,
+                                    aiOptionStr,
+                                    musicInfoData.timeSignature,
+                                    noteSize
+                                )
+                                clientConnection?.sendRequestData(requestJson)
+
+                                // TODO 데이터 나열(알고리즘 구현)
+
+                                // TODO 반주 생성
+
+                                // TODO 서버 연결 끊기
+                                loading_test.text = "서버와의 연결을 끊는 중"
+                                clientConnection?.disconnect()
+
+                                // TODO DB에 저장
+                                loading_test.text = "데이터베이스에 저장중"
+
+                                // TODO 악보 인터페이스 실행
+                            } else {
+                                throw Exception("서버와의 연결에 실패했습니다.")
+                            }
+                        }
+                        deferred.await()
+                    }
                 }
             }
-            // TODO 데이터가 준비가 다 되었다면 여기서 악보 인터페이스 액티비티로 전환
         }
     }
 
@@ -84,7 +161,19 @@ class SheetRedirectionActivity : AppCompatActivity() {
         } else {
             // TODO 상황 정리
             // 종료
+            mJob.cancel()
             super.onBackPressed()
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mJob.cancel()
+        if(this.clientConnection != null) {
+            if(this.clientConnection!!.connected) {
+                this.clientConnection!!.conn.shutdown()
+            }
+        }
+    }
+
 }

@@ -23,7 +23,8 @@
             android:layout_height="wrap_content"
             android:text="악보 생성중"
             android:gravity="center"
-            android:textSize="20sp">
+            android:textSize="20sp"
+            android:id="@+id/loading_test">
 
         </TextView>
 
