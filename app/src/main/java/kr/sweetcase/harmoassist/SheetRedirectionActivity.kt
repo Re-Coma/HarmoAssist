@@ -18,6 +18,10 @@ import kotlinx.coroutines.*
 import kr.sweetcase.harmoassist.listMaterials.Music
 import kr.sweetcase.harmoassist.modules.AIConnectionModule.AIClientTask
 import kr.sweetcase.harmoassist.modules.AIConnectionModule.labels.RequestData
+import java.io.FileOutputStream
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardOpenOption
 import kotlin.coroutines.CoroutineContext
 
 // TODO 여기에서 악보 인터페이스로 들어가는 코드 작성하면 됨.
@@ -63,6 +67,8 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
                     // TODO 현재 있는 악보를 불러오는 경우
                     // TODO DB에 접속해서 모든 미디데이터를 불러오기
                     Toast.makeText(this, "Current Sheet Loading", Toast.LENGTH_LONG).show()
+
+                    // TODO 악보 인터페이스 실행
                 }
                 MakeSheetType.NEW.key -> {
 
@@ -72,6 +78,8 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
                     // TODO 새롭게 만드는 경우이므로
                     // TODO 생성된 악보 정보 데이터를 DB에 저장만 하면 됨
                     Toast.makeText(this, "New Sheet Loading", Toast.LENGTH_LONG).show()
+
+                    // TODO 악보 인터페이스 실행
                 }
                 MakeSheetType.NEW_AI.key -> {
 
@@ -130,7 +138,24 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
                                 )
                                 clientConnection?.sendRequestData(requestJson)
 
+                                // TODO 데이터 받기
+                                val rawData = clientConnection?.receiveResultRawData()
+
                                 // TODO 데이터 나열(알고리즘 구현)
+                                loading_test.text = "데이터 나열 중..."
+
+                                // TODO Midi파일이 제데로 저장이 되었는지 테스트할 필요가있다.
+                                try {
+                                    val os = openFileOutput("result.mid", Context.MODE_PRIVATE)
+                                    os.write(rawData?.toByteArray())
+                                } catch(e : Exception) {
+                                    throw Exception("파일을 저장하는 데 실패했습니다.")
+                                }
+
+                                val iis = openFileInput("result.mid")
+
+                                // TODO 미디파일이 제대로 입력되었는지 확인할 필요가 있음
+
 
                                 // TODO 반주 생성
 

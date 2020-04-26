@@ -2,11 +2,13 @@ package kr.sweetcase.harmoassist.modules.AIConnectionModule
 
 import android.content.Context
 import android.net.Uri
+import android.net.wifi.aware.SubscribeConfig
 import android.os.AsyncTask
 import android.util.Log
 import io.lettuce.core.RedisClient
 import io.lettuce.core.RedisConnectionException
 import io.lettuce.core.RedisURI
+import io.lettuce.core.pubsub.RedisPubSubAdapter
 import kr.sweetcase.harmoassist.modules.AIConnectionModule.labels.ConnectionData
 import kr.sweetcase.harmoassist.modules.AIConnectionModule.labels.RedisClientData
 import kr.sweetcase.harmoassist.modules.AIConnectionModule.labels.RedisServerData
@@ -93,7 +95,6 @@ class AIClientTask {
             val connectLimit = 10
 
             // 서버로부터 키를 받음
-
             while(connectLimitCounter < connectLimit) {
                 var rawKey = connection.hget(IPMAP, this.clientInfo.myIP)
                 if(rawKey != null) {
@@ -106,7 +107,6 @@ class AIClientTask {
                         throw e
                     }
                     this.connected = true
-
                     break
                 }
                 else {
@@ -128,6 +128,7 @@ class AIClientTask {
         }
     }
 
+    // 연결 헤제
     fun disconnect() {
         if(!this.connected) {
             throw ConnectException("aleady disconnected")
@@ -160,16 +161,46 @@ class AIClientTask {
             throw ConnectException("aleady disconnected")
         }
         try {
-            val connection = this.conn.connectPubSub().sync()
+            // 서버에 요청 데이터 전송
+            val mainConnection = this.conn.connectPubSub()
+            val connection = mainConnection.sync() // 동기화 설정
             if(connection.publish(SERVER_CHANNEL, requestData.makeToJson()) == 0L) {
+                // 정상적으로 전송했으면 1, 실패시 0
                 throw RedisConnectionException("서버에 응답이 없습니다.")
             }
-
-            // TODO Subscribe 해결
-
         } catch (e : Exception) {
             // TODO 예외처리
             throw e
         }
+    }
+
+    // 서버로부터 문자열 데이터 받기(이후에 midiFile로 변환해야함)
+    fun receiveResultRawData() : String {
+        val mainConnection = this.conn.connectPubSub()
+        val listener = SubScribeListener(100)
+        mainConnection.addListener(listener)
+
+        // 동기화 설정하고 유저 키로 구독 시작
+        val connection = mainConnection.sync()
+        connection.subscribe(this.key)
+
+        var timeoutCounter = 0
+        val TIMEOUT = 60
+
+        // 1분동안 기다림
+        while(timeoutCounter < TIMEOUT) {
+            val data = listener.getData()?.message
+
+            if(data != null) {
+                Log.d("test-redis", data)
+                // 받으면 리턴
+                return data
+            } else {
+                Log.d("test-redis", "failed")
+                Thread.sleep(1000L)
+                timeoutCounter++
+            }
+        }
+        throw RedisConnectionException("서버와의 연결이 끊어졌습니다.")
     }
 }
