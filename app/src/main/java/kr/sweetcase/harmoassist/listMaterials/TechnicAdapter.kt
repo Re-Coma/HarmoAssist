@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kr.sweetcase.harmoassist.R
 import kr.sweetcase.harmoassist.TechnicSummaryActivity
 import kr.sweetcase.harmoassist.databinding.ItemTechnicBinding
+import kr.sweetcase.harmoassist.modules.technicDictionary.TechnicalInfo
 
 /**  기능 설명 리스트를 만들 때 쓰는 리사이클 어댑터 **/
 class TechnicAdapter(

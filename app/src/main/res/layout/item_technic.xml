@@ -3,7 +3,7 @@
     <data>
         <variable
             name="technic_name"
-            type="kr.sweetcase.harmoassist.listMaterials.TechnicalInfo" />
+            type="kr.sweetcase.harmoassist.modules.technicDictionary.TechnicalInfo" />
     </data>
     <!-- technic_summary의 카드뷰 -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,7 +20,7 @@
                 android:layout_margin="5dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/technic_name_text"
-                android:text="@{technic_name.techName}"
+                android:text="@{technic_name.technicName}"
                 android:textSize="15sp"
                 android:padding="15dp">
 
