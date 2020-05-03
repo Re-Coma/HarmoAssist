@@ -9,10 +9,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.activity_technic_summary.*
 import kr.sweetcase.harmoassist.listMaterials.TechnicalInfo
+import org.billthefarmer.mididriver.MidiDriver
 import java.io.IOException
 
-class TechnicSummaryActivity : AppCompatActivity() {
+class TechnicSummaryActivity : AppCompatActivity(), MidiDriver.OnMidiStartListener {
 
     lateinit var techInfo : TechnicalInfo
 
@@ -22,6 +24,9 @@ class TechnicSummaryActivity : AppCompatActivity() {
     lateinit var spinner: Spinner
 
     lateinit var activity : Context
+
+
+    lateinit var midiDriver: MidiDriver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,5 +75,36 @@ class TechnicSummaryActivity : AppCompatActivity() {
                 /** TODO 여기서 코드에 맞게 재생용 미디데이터 조정 **/
             }
         }
+
+        val midiDriver = MidiDriver()
+        midiDriver.setOnMidiStartListener(this)
+        midiDriver.start()
+
+        // 재생 버튼
+        tech_play_btn.setOnClickListener {
+
+            Toast.makeText(this, "hello", Toast.LENGTH_LONG).show()
+
+            val event = byteArrayOf(
+                (0x90.or(0x00)).toByte(),
+                0x3C.toByte(),
+                0x7F.toByte()
+            )
+            midiDriver.write(event)
+            Thread.sleep(500)
+
+            event[0] = 0x80.toByte()
+            midiDriver.write(event)
+
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        midiDriver.stop()
+    }
+
+    // 미디 재생
+    override fun onMidiStart() {
     }
 }

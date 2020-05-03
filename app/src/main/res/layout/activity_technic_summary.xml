@@ -107,6 +107,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="6"
                     android:scaleType="fitCenter"
+                    android:id="@+id/tech_play_btn"
                     android:src="@drawable/tech_play_btn">
                 </ImageView>
             </LinearLayout>
