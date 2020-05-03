@@ -85,6 +85,8 @@ class SelectedMusicDialog : Dialog {
             }
 
         }
+
+        // 열기
         openBtn.setOnClickListener {
             //intent 데이터 담기
             val enterIntent = Intent(this.activity, SheetRedirectionActivity::class.java)

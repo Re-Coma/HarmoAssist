@@ -1,5 +1,6 @@
 package kr.sweetcase.harmoassist
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.ProgressDialog
@@ -48,6 +49,30 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = mJob + Dispatchers.Main
 
+
+    // Redirection Exception
+    class RedirectionExceptionHandler(
+        val dialogBuilder : AlertDialog.Builder,
+        val activity : Activity,
+        override val key: CoroutineContext.Key<*>
+    ) : CoroutineExceptionHandler {
+
+        override fun handleException(context: CoroutineContext, exception: Throwable) {
+            // TODO 나중에 타입에 따라 다르게 설정해야 할 필요가 있음
+            val alert = dialogBuilder
+                .setTitle("ERROR")
+                .setMessage(exception.message.toString())
+                .setPositiveButton("확인", DialogInterface.OnClickListener {
+                        dialog, _ ->
+                    dialog.dismiss()
+                    activity.finish()
+                })
+                .create()
+            alert.show()
+        }
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sheet_redirection)
@@ -57,48 +82,93 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
 
         if(type != null) {
             when(type) {
-                // TODO 데이터 준비
 
+                // 불러오기
                 MakeSheetType.CURRENT.key -> {
 
-                    // intent 데이터 추출
-                    musicInfoData = intent.extras?.getSerializable(MakeSheetType.CURRENT.intentKeys[0]) as Music
-
-                    // TODO 현재 있는 악보를 불러오는 경우
-                    // TODO DB에 접속해서 모든 미디데이터를 불러오기
-                    Toast.makeText(this, "Current Sheet Loading", Toast.LENGTH_LONG).show()
-
-                    // TODO 악보 인터페이스 실행
-                }
-                MakeSheetType.NEW.key -> {
-
-                    // intent 데이터 추출
-                    musicInfoData = intent.extras?.getSerializable(MakeSheetType.NEW.intentKeys[0]) as Music
-
-                    // TODO 새롭게 만드는 경우이므로
-                    // TODO 생성된 악보 정보 데이터를 DB에 저장만 하면 됨
-                    Toast.makeText(this, "New Sheet Loading", Toast.LENGTH_LONG).show()
-
-                    // TODO 악보 인터페이스 실행
-                }
-                MakeSheetType.NEW_AI.key -> {
-
-                    // intent 데이터 추출
                     mJob = Job()
-
-                    // dialogBuilder
                     val dialogBuilder = AlertDialog.Builder(this@SheetRedirectionActivity)
 
 
-                    // 예외 핸들러
-                    val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+                    // Exception
+                    val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
 
                         // TODO 나중에 타입에 따라 다르게 설정해야 할 필요가 있음
                         val alert = dialogBuilder
                             .setTitle("ERROR")
                             .setMessage(throwable.message.toString())
                             .setPositiveButton("확인", DialogInterface.OnClickListener {
-                                dialog, _ ->
+                                    dialog, _ ->
+                                dialog.dismiss()
+                                finish()
+                            })
+                            .create()
+                        alert.show()
+                    }
+
+                    launch(exceptionHandler) {
+                        val deffered= async(Dispatchers.Default) {
+                            musicInfoData = intent.extras?.getSerializable(MakeSheetType.CURRENT.intentKeys[0]) as Music
+
+                            // TODO 현재 있는 악보를 불러오는 경우
+                            // TODO DB에 접속해서 모든 미디데이터를 불러오기
+
+                            // TODO 악보 인터페이스 실행
+                        }
+                        deffered.await()
+                    }
+                }
+                // 새 악보 생성
+                MakeSheetType.NEW.key -> {
+
+                    mJob = Job()
+                    val dialogBuilder = AlertDialog.Builder(this@SheetRedirectionActivity)
+                    val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+
+                        // TODO 나중에 타입에 따라 다르게 설정해야 할 필요가 있음
+                        val alert = dialogBuilder
+                            .setTitle("ERROR")
+                            .setMessage(throwable.message.toString())
+                            .setPositiveButton("확인", DialogInterface.OnClickListener {
+                                    dialog, _ ->
+                                dialog.dismiss()
+                                finish()
+                            })
+                            .create()
+                        alert.show()
+                    }
+
+                    // 코루틴 실행부
+                    launch(exceptionHandler) {
+                        val differed = async(Dispatchers.Default) {
+
+                            // intent 데이터 추출
+                            musicInfoData = intent.extras?.getSerializable(MakeSheetType.NEW.intentKeys[0]) as Music
+                            val emptyMeasure = intent.extras?.getInt(MakeSheetType.EMPTY_MEASURE.intentKeys[0]) as Int
+
+                            // TODO 새롭게 만드는 경우이므로
+                            // TODO 생성된 악보 정보 데이터를 DB에 저장만 하면 됨
+
+                            // TODO 악보 인터페이스 실행
+                        }
+                    }
+
+                }
+                MakeSheetType.NEW_AI.key -> {
+
+                    // intent 데이터 추출
+                    mJob = Job()
+
+                    // 핸들러 설정
+                    val dialogBuilder = AlertDialog.Builder(this@SheetRedirectionActivity)
+                    val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+
+                        // TODO 나중에 타입에 따라 다르게 설정해야 할 필요가 있음
+                        val alert = dialogBuilder
+                            .setTitle("ERROR")
+                            .setMessage(throwable.message.toString())
+                            .setPositiveButton("확인", DialogInterface.OnClickListener {
+                                    dialog, _ ->
                                 dialog.dismiss()
                                 finish()
                             })
@@ -108,9 +178,10 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
 
                     launch(exceptionHandler) {
                         val deferred = async(Dispatchers.Default) {
+
                             musicInfoData = intent.extras?.getSerializable(MakeSheetType.NEW_AI.intentKeys[0]) as Music
-                            val aiOptionStr = intent.extras?.getString(MakeSheetType.NEW_AI.intentKeys[1])
-                            val noteSize = intent.extras?.getInt(MakeSheetType.NEW_AI.intentKeys[2])
+                            val aiOptionStr = intent.extras?.getString(MakeSheetType.NEW_AI.intentKeys[1]) as String
+                            val noteSize = intent.extras?.getInt(MakeSheetType.NEW_AI.intentKeys[2]) as Int
 
                             // text 변경
                             loading_test.text = "서버 연결 중.."

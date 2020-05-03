@@ -34,6 +34,7 @@ class ComboActivity :AppCompatActivity(){
     lateinit var newTitle : String
     lateinit var newChordString : String
     var newTempo : Int = 0
+    var newEmptyMeasure : Int = 0
     lateinit var newTimeSignatureString : String
     var newComment : String? = null
     var hasComment = false
@@ -149,6 +150,27 @@ class ComboActivity :AppCompatActivity(){
                 }
                 else -> {
                     newTempo = edit_speed.text.toString().toInt()
+                }
+            }
+
+            // 반 악보 갯수 유효성 검토
+            when {
+                empty_measure_edit.text.toString().isEmpty() -> {
+                    empty_measure_edit.hint = "빈 악보 갯수를 입력하세요"
+                    empty_measure_edit.setHintTextColor(ContextCompat.getColor(this, R.color.red))
+                }
+                empty_measure_edit.text.toString().toInt() > 64 -> {
+                    empty_measure_edit.text = null
+                    empty_measure_edit.hint = "반 악보는 64개를 넘어설 수 없습니다."
+                    empty_measure_edit.setHintTextColor(ContextCompat.getColor(this, R.color.red))
+                }
+                empty_measure_edit.text.toString().toInt() <= 0 -> {
+                    empty_measure_edit.text = null
+                    empty_measure_edit.hint = "빈 악보 갯수는 0개가 될 수 없습니다."
+                    empty_measure_edit.setHintTextColor(ContextCompat.getColor(this, R.color.red))
+                }
+                else -> {
+                    newEmptyMeasure = empty_measure_edit.text.toString().toInt()
                     completed = true
                 }
             }
@@ -191,6 +213,7 @@ class ComboActivity :AppCompatActivity(){
                 // TODO 로딩창 띄우기 위한 데이터 전송 준비
                 val enterIntent = Intent(this, SheetRedirectionActivity::class.java)
                 enterIntent.putExtra("new music data", newMusic)
+                enterIntent.putExtra("empty measure", newEmptyMeasure)
 
                 // TODO 얘는 테스트 용으로 악보가 추가될 시 악보 액티비티로 이동
                 // AI작동 여부 세팅
@@ -211,14 +234,25 @@ class ComboActivity :AppCompatActivity(){
         }
         AI_RANDOM_Btn.setOnClickListener {
             if(aiSelected) {
+
+                // AI 선택 해제
                 aiSelected = false
                 ai_option_layer.visibility = View.GONE
                 it.setBackgroundColor(ContextCompat.getColor(this, R.color.real_gray))
+
+                spinner_chord.isEnabled = true
+                empty_measure_edit.isEnabled = true
             }
             else {
+
+                // AI 선택
                 aiSelected = true
                 ai_option_layer.visibility = View.VISIBLE
                 it.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
+
+                spinner_chord.isEnabled = false
+                empty_measure_edit.isEnabled = false
+
             }
         }
     }
