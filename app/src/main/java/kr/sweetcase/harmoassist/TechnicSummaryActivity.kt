@@ -21,6 +21,7 @@ class TechnicSummaryActivity : AppCompatActivity(), MidiDriver.OnMidiStartListen
     lateinit var spinner: Spinner
     var chordLevel = 0
 
+    val octaveLevel = 4
     lateinit var activity : Context
 
 
@@ -72,7 +73,7 @@ class TechnicSummaryActivity : AppCompatActivity(), MidiDriver.OnMidiStartListen
             }
         }
 
-        val midiDriver = MidiDriver()
+        midiDriver = MidiDriver()
         midiDriver.setOnMidiStartListener(this)
         midiDriver.start()
 
@@ -97,12 +98,12 @@ class TechnicSummaryActivity : AppCompatActivity(), MidiDriver.OnMidiStartListen
                 for(midx in chordArr.indices) {
 
                     // 여러음을 동시에 재생하려면 순차적으로 Sleep 없이 재생해야 한다.
-                    for(cidx in chordArr[midx].degreeArr.indices) {
+                    for(cidx in chordArr[midx].indices) {
                         midiDriver.write(
                             byteArrayOf(
                                 (0x90.or(0x00)).toByte(),
                                 // 화음 중 단음 Pitch, 루트 Pitch + 선택한 Pitch, 3옥타브 위
-                                (chordArr[midx].degreeArr[cidx] + pitchByteArr[midx] + 36).toByte(),
+                                (chordArr[midx][cidx] + pitchByteArr[midx] + (12 * octaveLevel)).toByte(),
                                 0x7F
                             )
                         )
@@ -110,12 +111,12 @@ class TechnicSummaryActivity : AppCompatActivity(), MidiDriver.OnMidiStartListen
                     Thread.sleep(500)
 
                     // 다시 꺼야됨
-                    for(cidx in chordArr[midx].degreeArr.indices) {
+                    for(cidx in chordArr[midx].indices) {
                         midiDriver.write(
                             byteArrayOf(
                                 (0x90.or(0x00)).toByte(),
                                 // 화음 중 단음 Pitch, 루트 Pitch + 선택한 Pitch, 3옥타브 위
-                                (chordArr[midx].degreeArr[cidx] + pitchByteArr[midx] + 36).toByte(),
+                                (chordArr[midx][cidx] + pitchByteArr[midx] + (12 * octaveLevel)).toByte(),
                                 0x00
                             )
                         )
@@ -130,6 +131,11 @@ class TechnicSummaryActivity : AppCompatActivity(), MidiDriver.OnMidiStartListen
 
     override fun onPause() {
         super.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        midiDriver.stop()
     }
 
     // 미디 재생

@@ -16,7 +16,7 @@ import java.io.Serializable
  */
 
 data class TechnicalChord (
-    val chordArray : Array<TechnicLabel>,
+    val chordArray : Array<ByteArray>,
     val pitchArray : Array<Pitch>
 ) : Serializable
 
@@ -24,5 +24,6 @@ data class TechnicalInfo (
     var technicName : String,
     val technicMidiData : Array<TechnicalChord>,
     val summary : String,
-    val imgRoot : String
+    val imgRoot : String,
+    var isFavorite : Boolean = false
 ) : Serializable
