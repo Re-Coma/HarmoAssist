@@ -21,7 +21,7 @@
  */
 package kr.sweetcase.amclib.midiManager.midiController.data
 
-import kr.sweetcase.RangeOutException
+import kr.sweetcase.amclib.midiManager.RangeOutException
 import java.util.*
 import kotlin.collections.ArrayList
 

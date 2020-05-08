@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
@@ -223,6 +224,7 @@ class ComboActivity :AppCompatActivity(){
                     enterIntent.putExtra("type", MakeSheetType.NEW_AI.key)
                 } else {
                     enterIntent.putExtra("type", MakeSheetType.NEW.key)
+                    Log.d("activity_test", "success0")
                 }
 
                 // TODO 악보 인터페이스로 이동하되

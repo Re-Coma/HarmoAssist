@@ -7,12 +7,15 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
+import com.midisheetmusic.ChooseSongActivity
+import com.midisheetmusic.FileUri
 import io.lettuce.core.RedisConnectionException
 import kotlinx.android.synthetic.main.activity_sheet_redirection.*
 import kotlinx.coroutines.*
@@ -107,8 +110,10 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
                     }
 
                     launch(exceptionHandler) {
-                        val deffered= async(Dispatchers.Default) {
+                        val deffered = async(Dispatchers.Default) {
+
                             musicInfoData = intent.extras?.getSerializable(MakeSheetType.CURRENT.intentKeys[0]) as Music
+                            Log.d("activity test", "success")
 
                             // TODO 현재 있는 악보를 불러오는 경우
                             // TODO DB에 접속해서 모든 미디데이터를 불러오기
@@ -143,15 +148,21 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
                         val differed = async(Dispatchers.Default) {
 
                             // intent 데이터 추출
-                            musicInfoData = intent.extras?.getSerializable(MakeSheetType.NEW.intentKeys[0]) as Music
-                            val emptyMeasure = intent.extras?.getInt(MakeSheetType.EMPTY_MEASURE.intentKeys[0]) as Int
+                            musicInfoData =
+                                intent.extras?.getSerializable(MakeSheetType.NEW.intentKeys[0]) as Music
+                            val emptyMeasure =
+                                intent.extras?.getInt(MakeSheetType.EMPTY_MEASURE.intentKeys[0]) as Int
 
                             // TODO 새롭게 만드는 경우이므로
                             // TODO 생성된 악보 정보 데이터를 DB에 저장만 하면 됨
 
                             // TODO 악보 인터페이스 실행
+                            // TODO 테스트
+                            //ChooseSongActivity.openFileByAssets(resources.assets.open("Chopin__Waltz_Op._64_No._2_in_Csharp_minor.mid"))
                         }
+                        differed.await()
                     }
+
 
                 }
                 MakeSheetType.NEW_AI.key -> {
