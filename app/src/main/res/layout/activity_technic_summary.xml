@@ -30,12 +30,14 @@
                 android:background="@color/real_gray">
 
             </TextView>
-            <ImageView
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:id="@+id/tech_summary_img">
-            </ImageView>
+                android:id="@+id/technic_chord_btn_layout">
+
+            </LinearLayout>
         </LinearLayout>
 
         <!-- 용도 설명 -->

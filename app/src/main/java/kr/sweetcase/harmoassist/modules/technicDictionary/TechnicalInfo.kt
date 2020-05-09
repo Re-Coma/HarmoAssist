@@ -24,6 +24,5 @@ data class TechnicalInfo (
     var technicName : String,
     val technicMidiData : Array<TechnicalChord>,
     val summary : String,
-    val imgRoot : String,
     var isFavorite : Boolean = false
 ) : Serializable

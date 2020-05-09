@@ -16,23 +16,28 @@ class TechnicSummaryActivity : AppCompatActivity(), MidiDriver.OnMidiStartListen
     lateinit var techInfo : TechnicalInfo
 
     lateinit var title : TextView
-    lateinit var imgView : ImageView
     lateinit var summary : TextView
     lateinit var spinner: Spinner
     var chordLevel = 0
 
     val octaveLevel = 4
     lateinit var activity : Context
-
-
     lateinit var midiDriver: MidiDriver
+
+    // get String array from TechnicalInfo
+    fun getStringArrayFromTechnicalInfo() : ArrayList<String> {
+
+        val resultStrArr = ArrayList<String>()
+
+
+        return resultStrArr
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_technic_summary)
 
         title = findViewById(R.id.tech_summary_title)
-        imgView = findViewById(R.id.tech_summary_img)
         summary = findViewById(R.id.tech_summary_text)
         spinner = findViewById(R.id.tech_test_spinner)
         activity = this
@@ -42,18 +47,6 @@ class TechnicSummaryActivity : AppCompatActivity(), MidiDriver.OnMidiStartListen
 
         title.text = techInfo.technicName
 
-        // 이미지세팅
-        try {
-
-            val inputStream = resources.assets.open(techInfo.imgRoot)
-            imgView.setImageDrawable(Drawable.createFromStream(inputStream, null))
-
-
-
-            inputStream.close()
-        } catch(a : IOException) { // 이미지가 없을 경우
-            /** TODO 서버로부터 직접 받는 코드 작성 **/
-        }
         // 설명 세팅
         summary.text = techInfo.summary
 
@@ -76,6 +69,9 @@ class TechnicSummaryActivity : AppCompatActivity(), MidiDriver.OnMidiStartListen
         midiDriver = MidiDriver()
         midiDriver.setOnMidiStartListener(this)
         midiDriver.start()
+
+
+        // 화음 출력
 
         // 재생 버튼
         tech_play_btn.setOnClickListener {
