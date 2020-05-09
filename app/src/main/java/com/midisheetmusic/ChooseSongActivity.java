@@ -34,9 +34,14 @@ import kr.sweetcase.harmoassist.R;
  *  <li> Recent (RecentSongsActivity) : Display of list of recently opened songs
  *  <li> Browse (FileBrowserActivity) : Let the user browse the filesystem for songs
  */
-public class ChooseSongActivity extends TabActivity {
+public class ChooseSongActivity extends Activity {
 
     static ChooseSongActivity globalActivity;
+
+    // 외부 액티비티에서 실행하기 위한 추가 코드 구성
+    public ChooseSongActivity() {
+        globalActivity = this;
+    }
 
     @Override
     public void onCreate(Bundle state) {
@@ -48,7 +53,7 @@ public class ChooseSongActivity extends TabActivity {
         Bitmap recentFilesIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.recentfilesicon);
         Bitmap browseFilesIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.browsefilesicon);
 
-        final TabHost tabHost = getTabHost();
+        //final TabHost tabHost = getTabHost();
 
         /*
         tabHost.addTab(tabHost.newTabSpec("All")

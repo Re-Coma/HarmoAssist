@@ -6,8 +6,8 @@
       <module fileurl="file://$PROJECT_DIR$/HarmoAssist.iml" filepath="$PROJECT_DIR$/HarmoAssist.iml" group="HarmoAssist" />
       <module fileurl="file://$PROJECT_DIR$/app/HarmoAssist-app.iml" filepath="$PROJECT_DIR$/app/HarmoAssist-app.iml" group="HarmoAssist/app" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="HarmoAssist/app" />
-      <module fileurl="file://$PROJECT_DIR$/harmo-HarmoAssist.iml" filepath="$PROJECT_DIR$/harmo-HarmoAssist.iml" group="HarmoAssist" />
-      <module fileurl="file://$PROJECT_DIR$/app/harmo-HarmoAssist-app.iml" filepath="$PROJECT_DIR$/app/harmo-HarmoAssist-app.iml" group="HarmoAssist/app" />
+      <module fileurl="file://$PROJECT_DIR$/harmoassistproject-HarmoAssist.iml" filepath="$PROJECT_DIR$/harmoassistproject-HarmoAssist.iml" group="HarmoAssist" />
+      <module fileurl="file://$PROJECT_DIR$/app/harmoassistproject-HarmoAssist-app.iml" filepath="$PROJECT_DIR$/app/harmoassistproject-HarmoAssist-app.iml" group="HarmoAssist/app" />
     </modules>
   </component>
 </project>
