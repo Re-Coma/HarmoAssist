@@ -32,7 +32,11 @@ import kotlin.coroutines.CoroutineContext
  *
  * 인텐트 파라미터는 MakeSheetType 참고
  */
+
+
+
 class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
+
 
     private var backKeyClickTime : Long = 0
     private lateinit var musicInfoData : Music
@@ -132,7 +136,7 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
 
                             // Test
                             val tmpFileUri = makeTestMidiUri("Chopin__Waltz_Op._64_No._2_in_Csharp_minor.mid")
-                            doOpenFile(tmpFileUri)
+                            doOpenFile(tmpFileUri, musicInfoData)
                         }
                         deffered.await()
                     }
@@ -171,7 +175,7 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
                             // TODO 원래 이 위치에서 MidiFile로 Midi파일 생성해서 저장해야 됨
                             val tmpFileUri = makeTestMidiUri("Chopin__Waltz_Op._64_No._2_in_Csharp_minor.mid")
                             // 파일열고 액티비티 전환
-                            doOpenFile(tmpFileUri)
+                            doOpenFile(tmpFileUri, musicInfoData)
 
                         }
                         differed.await()
@@ -297,7 +301,7 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
     }
 
     /************************* 여기서부터 악보생성 관련 함수들 *********************************/
-    fun doOpenFile(file: FileUri) {
+    fun doOpenFile(file: FileUri, musicData : Music) {
         val data = file.getData(this)
         if (data == null || data.size <= 6 || !MidiFile.hasMidiHeader(data)) {
             ChooseSongActivity.showErrorDialog(
@@ -312,7 +316,11 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
             SheetMusicActivity::class.java
         )
         intent.putExtra(SheetMusicActivity.MidiTitleID, file.toString())
+        intent.putExtra("music_info", musicData)
         startActivity(intent)
+
+        // 액티비티 종료
+        this.finish()
     }
 
     fun updateRecentFile(recentfile: FileUri) {

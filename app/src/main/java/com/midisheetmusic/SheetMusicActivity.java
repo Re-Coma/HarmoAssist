@@ -39,6 +39,8 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.ExpandableDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondarySwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
@@ -53,6 +55,9 @@ import java.net.URLEncoder;
 import java.util.zip.CRC32;
 
 import kr.sweetcase.harmoassist.R;
+import kr.sweetcase.harmoassist.SheetRedirectionActivity;
+import kr.sweetcase.harmoassist.StatisticActivity;
+import kr.sweetcase.harmoassist.listMaterials.Music;
 
 /**
  * SheetMusicActivity is the main activity. The main components are:
@@ -78,6 +83,9 @@ public class SheetMusicActivity extends MidiHandlingActivity implements SheetMus
     private long midiCRC;        /* CRC of the midi bytes */
     private Drawer drawer;
 
+    // 음악 정보
+    private Music musicInfoData;
+
      /** Create this SheetMusicActivity.
       * The Intent should have two parameters:
       * - data: The uri of the midi file to open.
@@ -86,6 +94,10 @@ public class SheetMusicActivity extends MidiHandlingActivity implements SheetMus
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
+
+
+        // 데이터 갖고오기
+        musicInfoData = (Music)getIntent().getSerializableExtra("music_info");
 
         // Hide the navigation bar before the views are laid out
         hideSystemUI();
@@ -136,71 +148,87 @@ public class SheetMusicActivity extends MidiHandlingActivity implements SheetMus
         if (savedOptions != null) {
             options.merge(savedOptions);
         }
-
         createViews();
     }
 
     /* Create the MidiPlayer and Piano views */
     void createViews() {
+        /**
+         * 1. 악보 정보
+         * 2. 악보 분석
+         * 3. 미디파일 추출
+         * 4. 저장
+         * 5. 화음 배치 (마디 선택 시)
+         */
         layout = findViewById(R.id.sheet_content);
-    /*
-        SwitchDrawerItem scrollVertically = new SwitchDrawerItem()
-                .withName(R.string.scroll_vertically)
-                .withChecked(options.scrollVert)
-                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
-                    options.scrollVert = isChecked;
-                    createSheetMusic(options);
+
+        // 악보 정보
+        PrimaryDrawerItem infoMusicBtn = new PrimaryDrawerItem()
+                .withName("악보 정보")
+                .withOnDrawerItemClickListener((view, i, item) -> {
+                    // TODO 액티비티 작성 필요
+                    return true;
+                });
+        PrimaryDrawerItem statisticBtn = new PrimaryDrawerItem()
+                .withName("악보 분석")
+                .withOnDrawerItemClickListener((view, i, item) -> {
+                    // TODO 백엔드 데이터를 갖고 와야 한다.
+                    Intent intent = new Intent(this, StatisticActivity.class);
+                    intent.putExtra("statistics_info", musicInfoData);
+                    this.startActivity(intent);
+                    return true;
+                });
+        PrimaryDrawerItem shareMidiBtn = new PrimaryDrawerItem()
+                .withName("미디파일 추출")
+                .withOnDrawerItemClickListener((view, i, item) -> {
+                    // TODO 우선 변경된 미디 데이터 tmp.mid에 업데이트 해야 한다.
+
+                    // 밑에있는건 예시
+                    // TODO Nuget 이후 바뀐 정책을 사용해야 함.
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.setType("application/*");
+
+                    intent.putExtra(Intent.EXTRA_SUBJECT, musicInfoData.getTitle());
+                    Log.d("paths", getFileStreamPath("tmp.mid").getAbsolutePath());
+                    intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(getFileStreamPath("tmp.mid").getAbsolutePath()));
+
+                    Intent chooser = Intent.createChooser(intent, musicInfoData.getTitle());
+                    view.getContext().startActivity(chooser);
+
+                    return true;
+                });
+        PrimaryDrawerItem saveBtn = new PrimaryDrawerItem()
+                .withName("저장")
+                .withOnDrawerItemClickListener((view, i, item) -> {
+                    // TODO DB에 저장
+                    return true;
                 });
 
-        SwitchDrawerItem useColors = new SwitchDrawerItem()
-                .withName(R.string.use_note_colors)
-                .withChecked(options.useColors)
-                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
-                    options.useColors = isChecked;
-                    createSheetMusic(options);
-                });
+        /** 화음 배치 하위메뉴 **/
+        SecondaryDrawerItem techBasicBtn = new SecondaryDrawerItem()
+                .withName("수동 설정");
+        SecondaryDrawerItem advancedTechBtn = new SecondaryDrawerItem()
+                .withName("화음 배치");
 
-        SecondarySwitchDrawerItem showMeasures = new SecondarySwitchDrawerItem()
-                .withName(R.string.show_measures)
-                .withLevel(2)
-                .withChecked(options.showMeasures)
-                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
-                    options.showMeasures = isChecked;
-                    createSheetMusic(options);
-                });
+        /** 화음 배치 메뉴 **/
+        ExpandableDrawerItem techBtn = new ExpandableDrawerItem()
+                .withName("화음 베치")
+                .withSubItems(techBasicBtn, advancedTechBtn);
 
-        SecondaryDrawerItem loopStart = new SecondaryDrawerItem()
-                .withIdentifier(ID_LOOP_START)
-                .withBadge(Integer.toString(options.playMeasuresInLoopStart + 1))
-                .withName(R.string.play_measures_in_loop_start)
-                .withLevel(2);
 
-        SecondaryDrawerItem loopEnd = new SecondaryDrawerItem()
-                .withIdentifier(ID_LOOP_END)
-                .withBadge(Integer.toString(options.playMeasuresInLoopEnd + 1))
-                .withName(R.string.play_measures_in_loop_end)
-                .withLevel(2);
-
-        ExpandableSwitchDrawerItem loopSettings = new ExpandableSwitchDrawerItem()
-                .withIdentifier(ID_LOOP_ENABLE)
-                .withName(R.string.loop_on_measures)
-                .withChecked(options.playMeasuresInLoop)
-                .withOnCheckedChangeListener((iDrawerItem, compoundButton, isChecked) -> {
-                    options.playMeasuresInLoop = isChecked;
-                })
-                .withSubItems(showMeasures, loopStart, loopEnd);
-*/
         // Drawer
         drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withInnerShadow(true)
                 .addDrawerItems(
-                        //scrollVertically
-                        //useColors,
-                        //loopSettings,
-                        //new DividerDrawerItem()
+                        infoMusicBtn,
+                        statisticBtn,
+                        shareMidiBtn,
+                        saveBtn,
+                        new DividerDrawerItem(),
+                        techBtn
                 )
-                .inflateMenu(R.menu.sheet_menu)
                 .withOnDrawerItemClickListener((view, i, item) -> drawerItemClickListener(item))
                 .withDrawerGravity(Gravity.RIGHT)
                 .build();
@@ -271,56 +299,10 @@ public class SheetMusicActivity extends MidiHandlingActivity implements SheetMus
     }
 
 
-    /** Handle clicks on the drawer menu */
+    /** TODO Handle clicks on the drawer menu */
     public boolean drawerItemClickListener(IDrawerItem item) {
         switch ((int)item.getIdentifier()) {
-            case R.id.song_settings:
-                changeSettings();
-                drawer.closeDrawer();
-                break;
-            case R.id.save_images:
-                showSaveImagesDialog();
-                drawer.closeDrawer();
-                break;
-            case ID_LOOP_START:
-                // Note that we display the measure numbers starting at 1,
-                // but the actual playMeasuresInLoopStart field starts at 0.
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.play_measures_in_loop_start);
-                String[] items = makeStringList(1, options.lastMeasure + 1);
-                builder.setItems(items, (dialog, i) -> {
-                    options.playMeasuresInLoopStart = Integer.parseInt(items[i]) - 1;
-                    // Make sure End is not smaller than Start
-                    if (options.playMeasuresInLoopStart > options.playMeasuresInLoopEnd) {
-                        options.playMeasuresInLoopEnd = options.playMeasuresInLoopStart;
-                        drawer.updateBadge(ID_LOOP_END, new StringHolder(items[i]));
-                    }
-                    ((SecondaryDrawerItem) item).withBadge(items[i]);
-                    drawer.updateItem(item);
-                });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-                alertDialog.getListView().setSelection(options.playMeasuresInLoopStart);
-                break;
-            case ID_LOOP_END:
-                // Note that we display the measure numbers starting at 1,
-                // but the actual playMeasuresInLoopEnd field starts at 0.
-                builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.play_measures_in_loop_end);
-                items = makeStringList(1, options.lastMeasure + 1);
-                builder.setItems(items, (dialog, i) -> {
-                    options.playMeasuresInLoopEnd = Integer.parseInt(items[i]) - 1;
-                    // Make sure End is not smaller than Start
-                    if (options.playMeasuresInLoopStart > options.playMeasuresInLoopEnd) {
-                        options.playMeasuresInLoopStart = options.playMeasuresInLoopEnd;
-                        drawer.updateBadge(ID_LOOP_START, new StringHolder(items[i]));
-                    }
-                    ((SecondaryDrawerItem) item).withBadge(items[i]);
-                    drawer.updateItem(item);
-                });
-                alertDialog = builder.create();
-                alertDialog.show();
-                alertDialog.getListView().setSelection(options.playMeasuresInLoopEnd);
+            case R.id.sheet_info_menu_btn:
                 break;
         }
         return true;
