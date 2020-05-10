@@ -143,7 +143,7 @@ public class SheetMusicActivity extends MidiHandlingActivity implements SheetMus
     /* Create the MidiPlayer and Piano views */
     void createViews() {
         layout = findViewById(R.id.sheet_content);
-
+    /*
         SwitchDrawerItem scrollVertically = new SwitchDrawerItem()
                 .withName(R.string.scroll_vertically)
                 .withChecked(options.scrollVert)
@@ -189,16 +189,16 @@ public class SheetMusicActivity extends MidiHandlingActivity implements SheetMus
                     options.playMeasuresInLoop = isChecked;
                 })
                 .withSubItems(showMeasures, loopStart, loopEnd);
-
+*/
         // Drawer
         drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withInnerShadow(true)
                 .addDrawerItems(
-                        scrollVertically,
-                        useColors,
-                        loopSettings,
-                        new DividerDrawerItem()
+                        //scrollVertically
+                        //useColors,
+                        //loopSettings,
+                        //new DividerDrawerItem()
                 )
                 .inflateMenu(R.menu.sheet_menu)
                 .withOnDrawerItemClickListener((view, i, item) -> drawerItemClickListener(item))
