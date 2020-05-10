@@ -8,22 +8,29 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Point
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.RadioButton
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import kr.sweetcase.harmoassist.databinding.ItemMusicBinding
 import androidx.core.view.get
 import androidx.core.view.size
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_musiclist.*
 import kr.sweetcase.harmoassist.dialogs.SelectedMusicDialog
+import kr.sweetcase.harmoassist.listMaterials.DataAdapter
 import kr.sweetcase.harmoassist.listMaterials.Music
 import kr.sweetcase.harmoassist.listMaterials.RecyclerDecoration
+import kr.sweetcase.harmoassist.modules.DBModule.DBHandler
+import kr.sweetcase.harmoassist.modules.DBModule.Song
 import java.util.*
 
 
@@ -34,6 +41,8 @@ var selectedIdx = -1 // 선택이 안되어 있는 경우 -1 처리
 var preSelectedIdx = -1 // 이전 선택 버퍼
 
 class MusicListActivity :AppCompatActivity() {
+
+    lateinit var adapter: DataAdapter
 
     val music = ArrayList<Music>()
     private val activity = this
@@ -65,19 +74,27 @@ class MusicListActivity :AppCompatActivity() {
         windowSize = Point()
         display.getSize(windowSize)
 
-        for (i in 0..10) {
+        var hander: DBHandler=DBHandler(this)
+        var song= Song()
+        song=hander!!.getAllFileInfo()
+        song.setTitleNum()
+        hander.testdata()
+        //var ia:Int=song.sheetList[0].temp
+
+
+        for (i in 1..song.titleListNum) {
             music.add(
                 Music(
-                    "곡 제목 $i",
-                    "곡 내용",
-                    "C Major",
-                    180,
-                    "3/4"
+                    "${song.titleList[i-1].title}",
+                    "${song.titleList[i-1].summary}",
+                    "${song.sheetList[i-1].harmonic}",
+                    song.sheetList[i-1].tempo,
+                    "${song.sheetList[i-1].timeSignature}"
                 )
             )
 
             // 곡 제목 추가
-            titleArray.add("곡 제목 $i")
+            titleArray.add("${music[i-1].title} $i")
         }
         recycler_view.apply {
             layoutManager = LinearLayoutManager(this@MusicListActivity)
@@ -102,6 +119,65 @@ class MusicListActivity :AppCompatActivity() {
             )
             recycler_view.addItemDecoration(spaceDecoration)
         }
+
+        list_search_text.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                var keyWord=list_search_text.text.toString()
+                var searchSong=Song()
+                searchSong=hander!!.searchFileInfo(keyWord)
+                searchSong.setTitleNum()
+
+                music.clear()
+
+                for (i in 1..searchSong.titleListNum) {
+                    music.add(
+                        Music(
+                            "${searchSong.titleList[i-1].title}",
+                            "${searchSong.titleList[i-1].summary}",
+                            "${searchSong.sheetList[i-1].harmonic}",
+                            searchSong.sheetList[i-1].tempo,
+                            "${searchSong.sheetList[i-1].timeSignature}"
+                        )
+                    )
+
+                    // 곡 제목 추가
+                    titleArray.add("${music[i-1].title} $i")
+                }
+
+
+                recycler_view.apply {
+                    layoutManager = LinearLayoutManager(this@MusicListActivity)
+                    adapter = MusicAdapter(
+                        // Music Adapter 멤버변수에 선택, 이전에 선택된 인덱스추가
+                        music,
+                        activity=activity,
+                        windowSize = windowSize
+                    ) { music ->
+
+                        // 선택된 인덱스 갱신
+                        preSelectedIdx = selectedIdx
+                        selectedIdx = getSelectedIndexByTitle(music.title)
+                        if(preSelectedIdx == selectedIdx)
+                            selectedIdx = -1
+                    }
+                    recycler_view.addItemDecoration(
+                        DividerItemDecoration(
+                            this@MusicListActivity,
+                            LinearLayoutManager.VERTICAL
+                        )
+                    )
+                    recycler_view.addItemDecoration(spaceDecoration)
+                }
+
+            }
+        })
     }
 
     // 상단 우측에 있는 메뉴
@@ -144,7 +220,7 @@ class MusicListActivity :AppCompatActivity() {
         private val items :List<Music>,
         private val activity: MusicListActivity,
         private val windowSize : Point,
-        private  val clickListener: (music: Music)->Unit
+        private val clickListener: (music: Music)->Unit
     )  : RecyclerView.Adapter<MusicAdapter.MusicViewHolder>() {
 
         lateinit var parentGroup : ViewGroup

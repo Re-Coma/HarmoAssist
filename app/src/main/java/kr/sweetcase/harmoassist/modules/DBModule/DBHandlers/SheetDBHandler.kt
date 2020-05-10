@@ -1,12 +1,13 @@
-package com.example.test
+package kr.sweetcase.harmoassist.modules.DBModule.DBHandlers
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import kr.sweetcase.harmoassist.modules.DBModule.DBHandler
 
 class SheetDBHandler {
     var harmonic: String=""
-    var temp: Int=0
-    var timeSignature: Int=0
+    var tempo: Int=0
+    var timeSignature: String=""
     var tempoStyle: String=""
 
     //DB에 Sheet 정보를 추가하는 함수
@@ -25,5 +26,10 @@ class SheetDBHandler {
     //Sheet 테이블에서 해당하는 파일 이름을 가진 정보를 삭제하는 함수
     fun deleteAllSheetByTitle(delTitle: String, db: SQLiteDatabase){
         db!!.delete(DBHandler.SHEET_TABLE,"title=?", arrayOf(delTitle))
+    }
+
+    fun testdata(db: SQLiteDatabase){
+        addSheet(db,"title1", "harmonic1", 170, "signature1", "tempoStyle1")
+        addSheet(db,"title2", "harmonic2", 180, "signature2", "tempoStyle2")
     }
 }

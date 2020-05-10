@@ -2,9 +2,8 @@ package kr.sweetcase.harmoassist.modules.DBModule.DBMaterials
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-import kr.sweetcase.harmoassist.modules.DBModule.DBhandler
+import kr.sweetcase.harmoassist.modules.DBModule.DBHandler
 import java.io.*
-import java.nio.file.*
 
 
 //event
@@ -51,7 +50,7 @@ class LogModule {
     }
 
     fun writeLog(db: SQLiteDatabase, event: Int, string: String, title: String, trackIndex: Int){
-        val selectQuery=("SELECT MAX(LogIndex) FROM ${DBhandler.LOG_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex}")
+        val selectQuery=("SELECT MAX(LogIndex) FROM ${DBHandler.LOG_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex}")
         val cursor=db.rawQuery(selectQuery,null)
         var index: Int
 
@@ -68,16 +67,16 @@ class LogModule {
 
         val values = ContentValues()
 
-        values.put(DBhandler.EVENT, event)
-        values.put(DBhandler.LOG_INDEX, index+1)
-        values.put(DBhandler.DETAIL, detail)
+        values.put(DBHandler.EVENT, event)
+        values.put(DBHandler.LOG_INDEX, index+1)
+        values.put(DBHandler.DETAIL, detail)
 
-        db!!.insert(DBhandler.FIRST_MEASURE_TABLE, null, values)
+        db!!.insert(DBHandler.FIRST_MEASURE_TABLE, null, values)
     }
 
     //마디 추가 삭제 로그
     fun measureLog(db: SQLiteDatabase, event: Int, title: String, trackIndex: Int, measureIndex: Int) {
-        val selectQuery=("SELECT MAX(LogIndex) FROM ${DBhandler.LOG_TABLE}")
+        val selectQuery=("SELECT MAX(LogIndex) FROM ${DBHandler.LOG_TABLE}")
         val cursor=db.rawQuery(selectQuery,null)
         var index: Int
 
@@ -93,16 +92,16 @@ class LogModule {
 
         var detail="${title}%${trackIndex}%${measureIndex}%"
 
-        values.put(DBhandler.EVENT, event)
-        values.put(DBhandler.LOG_INDEX, index+1)
-        values.put(DBhandler.DETAIL, detail)
+        values.put(DBHandler.EVENT, event)
+        values.put(DBHandler.LOG_INDEX, index+1)
+        values.put(DBHandler.DETAIL, detail)
 
-        db!!.insert(DBhandler.LOG_TABLE, null, values)
+        db!!.insert(DBHandler.LOG_TABLE, null, values)
     }
 
     //노트 분할 로그
     fun noteSeperateLog(db: SQLiteDatabase, event: Int, title: String, trackIndex: Int, measureIndex: Int, noteIndex: Int, lastIndex: Int, num: Int/*분할할 갯수*/) {
-        val selectQuery=("SELECT MAX(${DBhandler.LOG_INDEX}) FROM ${DBhandler.LOG_TABLE}")
+        val selectQuery=("SELECT MAX(${DBHandler.LOG_INDEX}) FROM ${DBHandler.LOG_TABLE}")
         val cursor=db.rawQuery(selectQuery,null)
         var index: Int
 
@@ -118,16 +117,16 @@ class LogModule {
 
         var detail="${title}%${trackIndex}%${measureIndex}%${noteIndex}%${lastIndex}%${num}%"
 
-        values.put(DBhandler.EVENT, event)
-        values.put(DBhandler.LOG_INDEX, index+1)
-        values.put(DBhandler.DETAIL, detail)
+        values.put(DBHandler.EVENT, event)
+        values.put(DBHandler.LOG_INDEX, index+1)
+        values.put(DBHandler.DETAIL, detail)
 
-        db!!.insert(DBhandler.LOG_TABLE, null, values)
+        db!!.insert(DBHandler.LOG_TABLE, null, values)
     }
 
     //노트 합병 로그
     fun noteMergeLog(db: SQLiteDatabase, event: Int, title: String, trackIndex: Int, measureIndex: Int, noteIndex: Int, lastIndex: Int, num: Int) {
-        val selectQuery=("SELECT MAX(${DBhandler.LOG_INDEX}) FROM ${DBhandler.LOG_TABLE}")
+        val selectQuery=("SELECT MAX(${DBHandler.LOG_INDEX}) FROM ${DBHandler.LOG_TABLE}")
         val cursor=db.rawQuery(selectQuery,null)
         var index: Int
 
@@ -143,17 +142,17 @@ class LogModule {
 
         var detail="${title}%${trackIndex}%${measureIndex}%${noteIndex}%${lastIndex}%${num}%"
 
-        values.put(DBhandler.EVENT, event)
-        values.put(DBhandler.LOG_INDEX, index+1)
-        values.put(DBhandler.DETAIL, detail)
+        values.put(DBHandler.EVENT, event)
+        values.put(DBHandler.LOG_INDEX, index+1)
+        values.put(DBHandler.DETAIL, detail)
 
-        db!!.insert(DBhandler.LOG_TABLE, null, values)
+        db!!.insert(DBHandler.LOG_TABLE, null, values)
 
     }
 
     //음표 추가 삭제 로그
     fun chordLog(db: SQLiteDatabase, event: Int, title: String, trackIndex: Int, measureIndex: Int, noteIndex: Int, octave: Int, pitch: String) {
-        val selectQuery=("SELECT MAX(${DBhandler.LOG_INDEX}) FROM ${DBhandler.LOG_TABLE}")
+        val selectQuery=("SELECT MAX(${DBHandler.LOG_INDEX}) FROM ${DBHandler.LOG_TABLE}")
         val cursor=db.rawQuery(selectQuery,null)
         var index: Int
 
@@ -169,17 +168,17 @@ class LogModule {
 
         var detail="${title}%${trackIndex}%${measureIndex}%${noteIndex}%${octave}%${pitch}%"
 
-        values.put(DBhandler.EVENT, event)
-        values.put(DBhandler.LOG_INDEX, index+1)
-        values.put(DBhandler.DETAIL, detail)
+        values.put(DBHandler.EVENT, event)
+        values.put(DBHandler.LOG_INDEX, index+1)
+        values.put(DBHandler.DETAIL, detail)
 
-        db!!.insert(DBhandler.LOG_TABLE, null, values)
+        db!!.insert(DBHandler.LOG_TABLE, null, values)
 
     }
 
     //화믕 생성 수정 로그
     fun harmonicLog(db: SQLiteDatabase, event: Int, title: String, trackIndex: Int, measureIndex: Int, chord: String, chordStyle: Int) {
-        val selectQuery=("SELECT MAX(${DBhandler.LOG_INDEX}) FROM ${DBhandler.LOG_TABLE}")
+        val selectQuery=("SELECT MAX(${DBHandler.LOG_INDEX}) FROM ${DBHandler.LOG_TABLE}")
         val cursor=db.rawQuery(selectQuery,null)
         var index: Int
 
@@ -195,11 +194,11 @@ class LogModule {
 
         var detail="${title}%${trackIndex}%${measureIndex}%${chord}%${chordStyle}%"
 
-        values.put(DBhandler.EVENT, event)
-        values.put(DBhandler.LOG_INDEX, index+1)
-        values.put(DBhandler.DETAIL, detail)
+        values.put(DBHandler.EVENT, event)
+        values.put(DBHandler.LOG_INDEX, index+1)
+        values.put(DBHandler.DETAIL, detail)
 
-        db!!.insert(DBhandler.LOG_TABLE, null, values)
+        db!!.insert(DBHandler.LOG_TABLE, null, values)
     }
 
     fun testdata(db: SQLiteDatabase){
@@ -228,7 +227,7 @@ class LogModule {
     }
 
     fun logCheck(db: SQLiteDatabase){
-        val selectQuery=("SELECT * FROM ${DBhandler.LOG_TABLE} ORDER BY ${DBhandler.LOG_INDEX} ASC")
+        val selectQuery=("SELECT * FROM ${DBHandler.LOG_TABLE} ORDER BY ${DBHandler.LOG_INDEX} ASC")
         val cursor=db.rawQuery(selectQuery,null)
         var event: Int
         var str: String
@@ -237,8 +236,8 @@ class LogModule {
         if (cursor.moveToFirst()){
             //index=cursor.getInt(cursor.getColumnIndex((DBhandler.MEASURE_INDEX)))
             do{
-                event=cursor.getInt(cursor.getColumnIndex(DBhandler.EVENT))
-                str=cursor.getString(cursor.getColumnIndex(DBhandler.DETAIL))
+                event=cursor.getInt(cursor.getColumnIndex(DBHandler.EVENT))
+                str=cursor.getString(cursor.getColumnIndex(DBHandler.DETAIL))
                 detail=str.split("%")
                 logProcess(db, event, detail)
             }while(cursor.moveToNext())
@@ -247,14 +246,14 @@ class LogModule {
         }
     }
     fun check(db: SQLiteDatabase): List<String>{
-        val selectQuery=("SELECT * FROM ${DBhandler.LOG_TABLE} ORDER BY ${DBhandler.LOG_INDEX} ASC")
+        val selectQuery=("SELECT * FROM ${DBHandler.LOG_TABLE} ORDER BY ${DBHandler.LOG_INDEX} ASC")
         val cursor=db.rawQuery(selectQuery,null)
         var event: Int
 
         var detail: List<String>
 
         if(cursor.moveToFirst()) {
-            val str: String = cursor.getString(cursor.getColumnIndex(DBhandler.DETAIL))
+            val str: String = cursor.getString(cursor.getColumnIndex(DBHandler.DETAIL))
             detail=str.split("%")
             return detail
         }

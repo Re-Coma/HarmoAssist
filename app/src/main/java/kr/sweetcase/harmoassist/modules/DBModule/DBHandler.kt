@@ -1,9 +1,10 @@
-package com.example.test
+package kr.sweetcase.harmoassist.modules.DBModule
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper
+import kr.sweetcase.harmoassist.modules.DBModule.DBHandlers.*
 
 //DB 조작을 위해 사용하는 클래스
 class DBHandler(context: Context) :SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION){
@@ -64,7 +65,7 @@ class DBHandler(context: Context) :SQLiteOpenHelper(context, DB_NAME, null, DB_V
         val createFileinfoTable =
             ("CREATE TABLE $FILEINFO_TABLE ($TITLE TEXT PRIMARY KEY,$SUMMARY TEXT)")
         val createSheetTable =
-            ("CREATE TABLE $SHEET_TABLE ($TITLE TEXT PRIMARY KEY, $HAMONIC TEXT, $TEMPO TEXT, $TIME_SIGNATURE TEXT, $TEMPO_STYLE TEXT)")
+            ("CREATE TABLE $SHEET_TABLE ($TITLE TEXT PRIMARY KEY, $HAMONIC TEXT, $TEMPO INT, $TIME_SIGNATURE TEXT, $TEMPO_STYLE TEXT)")
 
         val createFirstMeasureTable =//("CREATE TABLE $FIRST_MEASURE_TABLE ($TRACK_INDEX INT, $MEASURE_INDEX INT PRIMARY KEY, $TITLE TEXT)")
             ("CREATE TABLE $FIRST_MEASURE_TABLE ($TRACK_INDEX INT, $MEASURE_INDEX INT, $TITLE TEXT, PRIMARY KEY($TRACK_INDEX, $MEASURE_INDEX, $TITLE))")
@@ -188,19 +189,22 @@ class DBHandler(context: Context) :SQLiteOpenHelper(context, DB_NAME, null, DB_V
     fun testdata(){
         val db=this.writableDatabase
         val e=TitleDBHandler()
+        val f=SheetDBHandler()
         val a=MeasureDBHandler()
         val b=HarmonicLineDBHandler()
         val c=NoteDBHandler()
         val d=OneChordDBHandler()
         val logm=LogModule()
 
+        f.testdata(db)
         e.testdata(db)
         a.testdata(db)
         b.testdata(db)
         c.testdata(db)
         d.testdata(db)
 
-        logm.testdata(db)
+        //logm.testdata(db)
+        db.close()
     }
 
     fun testLog(){
@@ -224,19 +228,35 @@ class DBHandler(context: Context) :SQLiteOpenHelper(context, DB_NAME, null, DB_V
     //파일 목록 불러오기 함수
     fun getAllFileInfo(): Song {
         val db=readableDatabase
-        val selectALLQuery=("SELECT * FROM $FILEINFO_TABLE")
+        val selectALLQuery=("SELECT * FROM $FILEINFO_TABLE ORDER BY $TITLE ASC")
+        val selectALLQuery2=("SELECT * FROM $SHEET_TABLE ORDER BY $TITLE ASC")
+        //val selectALLQuery3=("SELECT * FROM $FIRST_HAMONICLINE_TABLE ORDER BY $TITLE ASC")
         val cursor=db.rawQuery(selectALLQuery,null)
+        val cursor2=db.rawQuery(selectALLQuery2,null)
+        //val cursor3=db.rawQuery(selectALLQuery3,null)
         var songInfo: Song=Song()
-        var fileInfo:TitleDBHandler = TitleDBHandler()
+
 
         if(cursor!=null){
             if(cursor.moveToFirst()){
                 do{
+                    var fileInfo:TitleDBHandler = TitleDBHandler()
                     fileInfo.title=cursor.getString(cursor.getColumnIndex(TITLE))
                     fileInfo.summary=cursor.getString(cursor.getColumnIndex(SUMMARY))
 
                     songInfo.titleList.add(fileInfo)
                 }while(cursor.moveToNext())
+            }
+
+            if(cursor2.moveToFirst()){
+                do{
+                    var sheetInfo=SheetDBHandler()
+                    sheetInfo.harmonic=cursor2.getString(cursor2.getColumnIndex(HAMONIC))
+                    sheetInfo.tempo=cursor2.getInt(cursor2.getColumnIndex(TEMPO))
+                    sheetInfo.timeSignature=cursor2.getString(cursor2.getColumnIndex(TIME_SIGNATURE))
+
+                    songInfo.sheetList.add(sheetInfo)
+                }while(cursor2.moveToNext())
             }
         }
         cursor.close()
@@ -298,11 +318,11 @@ class DBHandler(context: Context) :SQLiteOpenHelper(context, DB_NAME, null, DB_V
         val selectALLQuery=("SELECT * FROM $FILEINFO_TABLE WHERE $TITLE LIKE \"%$keyWord%\"")
         val cursor=db.rawQuery(selectALLQuery,null)
         var songinfo: Song=Song()
-        var fileInfo:TitleDBHandler = TitleDBHandler()
 
         if(cursor!=null){
             if(cursor.moveToFirst()){
                 do{
+                    var fileInfo:TitleDBHandler = TitleDBHandler()
                     fileInfo.title=cursor.getString(cursor.getColumnIndex(TITLE))
                     fileInfo.summary=cursor.getString(cursor.getColumnIndex(SUMMARY))
 
@@ -371,8 +391,8 @@ class DBHandler(context: Context) :SQLiteOpenHelper(context, DB_NAME, null, DB_V
                 //악보정보 읽기
                 if(sheetCursor.moveToFirst()){
                     sheetInfo.harmonic=sheetCursor.getString(titleCursor.getColumnIndex(HAMONIC))
-                    sheetInfo.temp=sheetCursor.getInt(titleCursor.getColumnIndex(TEMPO))
-                    sheetInfo.timeSignature=sheetCursor.getInt(titleCursor.getColumnIndex(TIME_SIGNATURE))
+                    sheetInfo.tempo=sheetCursor.getInt(titleCursor.getColumnIndex(TEMPO))
+                    sheetInfo.timeSignature=sheetCursor.getString(titleCursor.getColumnIndex(TIME_SIGNATURE))
                     sheetInfo.tempoStyle=sheetCursor.getString(titleCursor.getColumnIndex(TEMPO_STYLE))
 
                     songInfo.sheetInfo=sheetInfo

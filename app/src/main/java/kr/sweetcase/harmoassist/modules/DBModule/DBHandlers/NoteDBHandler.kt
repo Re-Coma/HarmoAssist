@@ -1,7 +1,8 @@
-package com.example.test
+package kr.sweetcase.harmoassist.modules.DBModule.DBHandlers
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import kr.sweetcase.harmoassist.modules.DBModule.DBHandler
 
 //DB Note 테이블을 사용하기 위한 클래스
 class NoteDBHandler {

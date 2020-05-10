@@ -2,7 +2,7 @@ package kr.sweetcase.harmoassist.modules.DBModule.DBMaterials
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-import kr.sweetcase.harmoassist.modules.DBModule.DBhandler
+import kr.sweetcase.harmoassist.modules.DBModule.DBHandler
 
 class Note {
 
@@ -20,7 +20,7 @@ class Note {
         //val handler=dBhandler
         //val db=this.writableDatabase
 
-        val selectQuery=("SELECT MAX(NoteIndex) FROM ${DBhandler.FIRST_NOTE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=${measureIndex}")
+        val selectQuery=("SELECT MAX(NoteIndex) FROM ${DBHandler.FIRST_NOTE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=${measureIndex}")
         val cursor=db.rawQuery(selectQuery,null)
         var index: Int
 
@@ -34,14 +34,14 @@ class Note {
 
         val values= ContentValues()
 
-        values.put(DBhandler.TRACK_INDEX, trackIndex)
-        values.put(DBhandler.MEASURE_INDEX, measureIndex)
-        values.put(DBhandler.TITLE, title)
-        values.put(DBhandler.DURATION, duration)
-        values.put(DBhandler.NOTE_STYLE, noteStyle)
-        values.put(DBhandler.NOTE_INDEX, index+1)
+        values.put(DBHandler.TRACK_INDEX, trackIndex)
+        values.put(DBHandler.MEASURE_INDEX, measureIndex)
+        values.put(DBHandler.TITLE, title)
+        values.put(DBHandler.DURATION, duration)
+        values.put(DBHandler.NOTE_STYLE, noteStyle)
+        values.put(DBHandler.NOTE_INDEX, index+1)
 
-        db!!.insert(DBhandler.FIRST_NOTE_TABLE, null, values)
+        db!!.insert(DBHandler.FIRST_NOTE_TABLE, null, values)
         //val values =("INSERT INTO VALUES "+DBhandler.FIRST_MEASURE_TABLE+" ("+measure.title+","+measure.trackIndex+","+measure.MeasureIndex)
 
         //db.execSQL(values)
@@ -55,7 +55,7 @@ class Note {
         //val handler=dBhandler
         //val db=this.writableDatabase
 
-        val selectQuery=("SELECT MAX(NoteIndex) FROM ${DBhandler.FIRST_NOTE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=${measureIndex}")
+        val selectQuery=("SELECT MAX(NoteIndex) FROM ${DBHandler.FIRST_NOTE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=${measureIndex}")
         val cursor=db.rawQuery(selectQuery,null)
         var index: Int
 
@@ -74,7 +74,7 @@ class Note {
 
         for(i in 1..num) {
             var updateSql =
-                ("UPDATE ${DBhandler.FIRST_NOTE_TABLE} SET NoteIndex=$changeIndex WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex AND NoteIndex=$targetIndex")
+                ("UPDATE ${DBHandler.FIRST_NOTE_TABLE} SET NoteIndex=$changeIndex WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex AND NoteIndex=$targetIndex")
             db.execSQL(updateSql)
             targetIndex--
             changeIndex--
@@ -82,14 +82,14 @@ class Note {
 
         val values=ContentValues()
 
-        values.put(DBhandler.TRACK_INDEX, trackIndex)
-        values.put(DBhandler.MEASURE_INDEX, measureIndex)
-        values.put(DBhandler.TITLE, title)
-        values.put(DBhandler.DURATION, duration)
-        values.put(DBhandler.NOTE_STYLE, noteStyle)
-        values.put(DBhandler.NOTE_INDEX, noteIndex)
+        values.put(DBHandler.TRACK_INDEX, trackIndex)
+        values.put(DBHandler.MEASURE_INDEX, measureIndex)
+        values.put(DBHandler.TITLE, title)
+        values.put(DBHandler.DURATION, duration)
+        values.put(DBHandler.NOTE_STYLE, noteStyle)
+        values.put(DBHandler.NOTE_INDEX, noteIndex)
 
-        db!!.insert(DBhandler.FIRST_NOTE_TABLE, null, values)
+        db!!.insert(DBHandler.FIRST_NOTE_TABLE, null, values)
         //val values =("INSERT INTO VALUES "+DBhandler.FIRST_MEASURE_TABLE+" ("+measure.title+","+measure.trackIndex+","+measure.MeasureIndex)
 
         //db.execSQL(values)
@@ -101,7 +101,7 @@ class Note {
     }
 
     fun deleteAllNoteByTitle(delTitle: String, measureIndex: Int, trackIndex: Int, noteIndex: Int, db: SQLiteDatabase){
-        db!!.delete(DBhandler.FIRST_NOTE_TABLE,"title=?", arrayOf(delTitle))
+        db!!.delete(DBHandler.FIRST_NOTE_TABLE,"title=?", arrayOf(delTitle))
         //db!!.delete(DBhandler.FIRST_NOTE_TABLE,"title=? AND MeasureIndex=?", arrayOf(delTitle, measureIndex.toString()))
         //var sql=("DELETE FROM Note WHERE title="+delTitle+" AND MeasureIndex="+measureIndex+" AND TrackIndext="+trackIndex+" AND NoteIndext="+noteIndex)
         //db.execSQL(sql)
@@ -112,9 +112,9 @@ class Note {
         var startIndex: Int=deleteNoteIndex
         var changeIndex=startIndex+1
 
-        db!!.delete(DBhandler.FIRST_NOTE_TABLE,"Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex AND NoteIndex=?", arrayOf(Integer.toString(deleteNoteIndex)))
+        db!!.delete(DBHandler.FIRST_NOTE_TABLE,"Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex AND NoteIndex=?", arrayOf(Integer.toString(deleteNoteIndex)))
 
-        val selectQuery=("SELECT MAX(NoteIndex) FROM ${DBhandler.FIRST_NOTE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=${measureIndex}")
+        val selectQuery=("SELECT MAX(NoteIndex) FROM ${DBHandler.FIRST_NOTE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=${measureIndex}")
         val cursor=db.rawQuery(selectQuery,null)
 
         if (cursor.moveToFirst()){
@@ -127,7 +127,7 @@ class Note {
 
         while(startIndex<lastIndex) {
             var updateSql =
-                ("UPDATE ${DBhandler.FIRST_NOTE_TABLE} SET NoteIndex=$startIndex WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex AND NoteIndex=$changeIndex")
+                ("UPDATE ${DBHandler.FIRST_NOTE_TABLE} SET NoteIndex=$startIndex WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex AND NoteIndex=$changeIndex")
             db!!.execSQL(updateSql)
             startIndex++
             changeIndex++
@@ -137,13 +137,13 @@ class Note {
     fun changeNote(db: SQLiteDatabase, title: String, trackIndex: Int, measureIndex: Int, noteIndex: Int, duration: Int, noteStyle: Int) {
 
         var updateSql =
-            ("UPDATE ${DBhandler.FIRST_NOTE_TABLE} SET Duration=$duration AND NoteStyle=$noteStyle WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex AND NoteIndex=$noteIndex")
+            ("UPDATE ${DBHandler.FIRST_NOTE_TABLE} SET Duration=$duration AND NoteStyle=$noteStyle WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex AND NoteIndex=$noteIndex")
         db.execSQL(updateSql)
 
     }
 
     fun seperateNote(db: SQLiteDatabase, title: String, trackIndex: Int, measureIndex: Int, mergeNoteIndex: Int, merge: Int) {
-        val selectQuery=("SELECT MAX(NoteIndex) FROM ${DBhandler.FIRST_NOTE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=${measureIndex}")
+        val selectQuery=("SELECT MAX(NoteIndex) FROM ${DBHandler.FIRST_NOTE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=${measureIndex}")
         val cursor=db.rawQuery(selectQuery,null)
         var lastIndex: Int
         var startIndex: Int=mergeNoteIndex
@@ -152,8 +152,8 @@ class Note {
         var duration: Int
         var noteStyle: Int
 
-        val selectInfoQuery=("SELECT Duration FROM ${DBhandler.FIRST_NOTE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=${measureIndex} AND NoteIndex=${mergeNoteIndex}")
-        val selectInfoQuery2=("SELECT NoteStyle FROM ${DBhandler.FIRST_NOTE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=${measureIndex} AND NoteIndex=${mergeNoteIndex}")
+        val selectInfoQuery=("SELECT Duration FROM ${DBHandler.FIRST_NOTE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=${measureIndex} AND NoteIndex=${mergeNoteIndex}")
+        val selectInfoQuery2=("SELECT NoteStyle FROM ${DBHandler.FIRST_NOTE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=${measureIndex} AND NoteIndex=${mergeNoteIndex}")
 
         val cursor2=db.rawQuery(selectInfoQuery, null)
         val cursor3=db.rawQuery(selectInfoQuery2, null)
@@ -182,12 +182,12 @@ class Note {
 
         for(i in 0..num) {
             var updateSql =
-                ("UPDATE ${DBhandler.FIRST_NOTE_TABLE} SET NoteIndex=$changeIndex WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex AND NoteIndex=$lastIndex")
+                ("UPDATE ${DBHandler.FIRST_NOTE_TABLE} SET NoteIndex=$changeIndex WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex AND NoteIndex=$lastIndex")
             db.execSQL(updateSql)
             lastIndex--
             changeIndex--
         }
-        db.execSQL(("UPDATE ${DBhandler.FIRST_NOTE_TABLE} SET Duration=$changeDuration WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex AND NoteIndex=$lastIndex"))
+        db.execSQL(("UPDATE ${DBHandler.FIRST_NOTE_TABLE} SET Duration=$changeDuration WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex AND NoteIndex=$lastIndex"))
         seperate(db, title, trackIndex, measureIndex, mergeNoteIndex+1, changeDuration, noteStyle, merge)
 
     }
@@ -196,19 +196,19 @@ class Note {
         var index=startIndex
         for(i in 0..num) {
             val values = ContentValues()
-            values.put(DBhandler.TRACK_INDEX, trackIndex)
-            values.put(DBhandler.MEASURE_INDEX, measureIndex)
-            values.put(DBhandler.TITLE, title)
-            values.put(DBhandler.DURATION, duration)
-            values.put(DBhandler.NOTE_STYLE, noteStyle)
-            values.put(DBhandler.NOTE_INDEX, index)
-            db!!.insert(DBhandler.FIRST_NOTE_TABLE, null, values)
+            values.put(DBHandler.TRACK_INDEX, trackIndex)
+            values.put(DBHandler.MEASURE_INDEX, measureIndex)
+            values.put(DBHandler.TITLE, title)
+            values.put(DBHandler.DURATION, duration)
+            values.put(DBHandler.NOTE_STYLE, noteStyle)
+            values.put(DBHandler.NOTE_INDEX, index)
+            db!!.insert(DBHandler.FIRST_NOTE_TABLE, null, values)
             index++
         }
     }
 
     fun mergeNote(db: SQLiteDatabase, title: String, trackIndex: Int, measureIndex: Int, subNoteIndex: Int, mergeNum: Int) {
-        val selectQuery=("SELECT MAX(NoteIndex) FROM ${DBhandler.FIRST_NOTE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=${measureIndex}")
+        val selectQuery=("SELECT MAX(NoteIndex) FROM ${DBHandler.FIRST_NOTE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=${measureIndex}")
         val cursor=db.rawQuery(selectQuery,null)
         var lastIndex: Int
         var startIndex: Int=subNoteIndex
@@ -217,7 +217,7 @@ class Note {
         var durationb=startIndex+mergeNum-1  //합칠 듀레이션 범위
         var durationsubmit=0;
 
-        val selectQuery2=("SELECT Duration FROM ${DBhandler.FIRST_NOTE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=${measureIndex} AND NoteIndex BETWEEN $startIndex AND $durationb")
+        val selectQuery2=("SELECT Duration FROM ${DBHandler.FIRST_NOTE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=${measureIndex} AND NoteIndex BETWEEN $startIndex AND $durationb")
         val cursor2=db.rawQuery(selectQuery2,null)
         val onechord=OneChord()
 
@@ -238,7 +238,7 @@ class Note {
                 durationsubmit+=a
                 //i++
             }while(cursor2.moveToNext())
-            var updateSql=("UPDATE ${DBhandler.FIRST_NOTE_TABLE} SET Duration=$durationsubmit WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex AND NoteIndex=$startIndex")
+            var updateSql=("UPDATE ${DBHandler.FIRST_NOTE_TABLE} SET Duration=$durationsubmit WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex AND NoteIndex=$startIndex")
             db!!.execSQL(updateSql)
         }
 
@@ -256,7 +256,7 @@ class Note {
         for(i in 0..num) {
             //onechord.changeNoteIndex(db, title, trackIndex, measureIndex, changeIndex, targetIndex)
             var updateSql =
-                ("UPDATE ${DBhandler.FIRST_NOTE_TABLE} SET NoteIndex=$changeIndex WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex AND NoteIndex=4")
+                ("UPDATE ${DBHandler.FIRST_NOTE_TABLE} SET NoteIndex=$changeIndex WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex AND NoteIndex=4")
             db!!.execSQL(updateSql)
             targetIndex--
             changeIndex--
@@ -267,7 +267,7 @@ class Note {
         val oneChord=OneChord()
         oneChord.changeMeasureIndex(db, title, trackIndex, changeMeasureIndex, preMeasureIndex)
         var updateSql =
-            ("UPDATE ${DBhandler.FIRST_NOTE_TABLE} SET MeasureIndex=$changeMeasureIndex WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$preMeasureIndex")
+            ("UPDATE ${DBHandler.FIRST_NOTE_TABLE} SET MeasureIndex=$changeMeasureIndex WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$preMeasureIndex")
         db.execSQL(updateSql)
     }
 

@@ -2,7 +2,7 @@ package kr.sweetcase.harmoassist.modules.DBModule.DBMaterials
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-import kr.sweetcase.harmoassist.modules.DBModule.DBhandler
+import kr.sweetcase.harmoassist.modules.DBModule.DBHandler
 
 class HarmonicLine {
 
@@ -32,13 +32,13 @@ class HarmonicLine {
 
         val values = ContentValues()
 
-        values.put(DBhandler.TRACK_INDEX, trackIndex)
-        values.put(DBhandler.MEASURE_INDEX, measureIndex)
-        values.put(DBhandler.TITLE, title)
-        values.put(DBhandler.CHORD, chord)
-        values.put(DBhandler.CHORD_STYLE, chordStyle)
+        values.put(DBHandler.TRACK_INDEX, trackIndex)
+        values.put(DBHandler.MEASURE_INDEX, measureIndex)
+        values.put(DBHandler.TITLE, title)
+        values.put(DBHandler.CHORD, chord)
+        values.put(DBHandler.CHORD_STYLE, chordStyle)
 
-        db!!.insert(DBhandler.FIRST_HAMONICLINE_TABLE, null, values)
+        db!!.insert(DBHandler.FIRST_HAMONICLINE_TABLE, null, values)
         //val values =("INSERT INTO VALUES "+DBhandler.FIRST_MEASURE_TABLE+" ("+measure.title+","+measure.trackIndex+","+measure.MeasureIndex)
 
         //db.execSQL(values)
@@ -50,14 +50,14 @@ class HarmonicLine {
     }
 
     fun deleteAllHarmonicLineByTitle(delTitle: String, measureIndex: Int, db: SQLiteDatabase){
-        db!!.delete(DBhandler.FIRST_HAMONICLINE_TABLE,"title=?", arrayOf(delTitle))
+        db!!.delete(DBHandler.FIRST_HAMONICLINE_TABLE,"title=?", arrayOf(delTitle))
         //db!!.delete(DBhandler.FIRST_HAMONICLINE_TABLE,"title=? AND MeasureIndex=?", arrayOf(delTitle, measureIndex.toString()))
         //var sql=("DELETE FROM HarmonicLine WHERE title="+delTitle+"AND MeasureIndext="+measureIndex)
         //db.execSQL(sql)
     }
 
     fun delHarmonicLine(db: SQLiteDatabase, title: String, trackIndex: Int, deleteMeasureIndex: Int) {
-        val selectQuery=("SELECT MAX(MeasureIndex) FROM ${DBhandler.FIRST_HAMONICLINE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex}")
+        val selectQuery=("SELECT MAX(MeasureIndex) FROM ${DBHandler.FIRST_HAMONICLINE_TABLE} WHERE Title=\"${title}\" AND TrackIndex=${trackIndex}")
         val cursor=db.rawQuery(selectQuery,null)
         var lastIndex: Int
         var startIndex: Int=deleteMeasureIndex
@@ -70,11 +70,11 @@ class HarmonicLine {
         else{
             lastIndex=0
         }
-        db!!.delete(DBhandler.FIRST_HAMONICLINE_TABLE,"Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=?", arrayOf(Integer.toString(deleteMeasureIndex)))
+        db!!.delete(DBHandler.FIRST_HAMONICLINE_TABLE,"Title=\"${title}\" AND TrackIndex=${trackIndex} AND MeasureIndex=?", arrayOf(Integer.toString(deleteMeasureIndex)))
 
         while(startIndex<lastIndex) {
             var updateSql =
-                ("UPDATE ${DBhandler.FIRST_HAMONICLINE_TABLE} SET MeasureIndex=$startIndex WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$changeIndex")
+                ("UPDATE ${DBHandler.FIRST_HAMONICLINE_TABLE} SET MeasureIndex=$startIndex WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$changeIndex")
             db.execSQL(updateSql)
             startIndex++
             changeIndex++
@@ -82,7 +82,7 @@ class HarmonicLine {
     }
     fun changeMeasureIndex(db: SQLiteDatabase, title: String, trackIndex: Int, changeMeasureIndex: Int, preMeasureIndex: Int){
         var updateSql =
-            ("UPDATE ${DBhandler.FIRST_HAMONICLINE_TABLE} SET MeasureIndex=$changeMeasureIndex WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$preMeasureIndex")
+            ("UPDATE ${DBHandler.FIRST_HAMONICLINE_TABLE} SET MeasureIndex=$changeMeasureIndex WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$preMeasureIndex")
         db.execSQL(updateSql)
     }
 
@@ -109,7 +109,7 @@ class HarmonicLine {
 
     fun updateHarmonicLine(db: SQLiteDatabase, title: String, trackIndex: Int, measureIndex: Int, chord: String, chordStyle: Int){
         val updateSql =
-            ("UPDATE ${DBhandler.FIRST_HAMONICLINE_TABLE} SET Chord=\"${chord}\", ChordStyle=$chordStyle WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex")
+            ("UPDATE ${DBHandler.FIRST_HAMONICLINE_TABLE} SET Chord=\"${chord}\", ChordStyle=$chordStyle WHERE Title=\"${title}\" AND TrackIndex=$trackIndex AND MeasureIndex=$measureIndex")
         db.execSQL(updateSql)
         /*val values=ContentValues()
         values.put(DBhandler.TITLE, title)

@@ -2,7 +2,7 @@ package kr.sweetcase.harmoassist.modules.DBModule.DBMaterials
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-import kr.sweetcase.harmoassist.modules.DBModule.DBhandler
+import kr.sweetcase.harmoassist.modules.DBModule.DBHandler
 
 class Sheet {
 
@@ -17,13 +17,13 @@ class Sheet {
         //val db=this.writableDatabase
         val values = ContentValues()
 
-        values.put(DBhandler.TITLE, sheet.title)
-        values.put(DBhandler.HAMONIC, sheet.harmonic)
-        values.put(DBhandler.TEMPO, sheet.tempo)
-        values.put(DBhandler.TIME_SIGNATURE, sheet.timeSignature)
-        values.put(DBhandler.TEMPO_STYLE, sheet.tempoStyle)
+        values.put(DBHandler.TITLE, sheet.title)
+        values.put(DBHandler.HAMONIC, sheet.harmonic)
+        values.put(DBHandler.TEMPO, sheet.tempo)
+        values.put(DBHandler.TIME_SIGNATURE, sheet.timeSignature)
+        values.put(DBHandler.TEMPO_STYLE, sheet.tempoStyle)
 
-        val _success =db.insert(DBhandler.SHEET_TABLE, null, values)
+        val _success =db.insert(DBHandler.SHEET_TABLE, null, values)
         db.close()
 
         return (Integer.parseInt("$_success")==1)
@@ -31,7 +31,7 @@ class Sheet {
     }
 
     fun deleteAllSheetByTitle(delTitle: String, db: SQLiteDatabase){
-        db!!.delete(DBhandler.SHEET_TABLE,"title=?", arrayOf(delTitle))
+        db!!.delete(DBHandler.SHEET_TABLE,"title=?", arrayOf(delTitle))
         //db.delete("Sheet","title=?", arrayOf(delTitle))
     }
 }
