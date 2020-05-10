@@ -71,6 +71,21 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
 
     }
 
+    //TODO Test용 함수
+    fun makeTestMidiUri(testFileName : String) : FileUri {
+        val newOutputStream = openFileOutput("tmp.mid", Context.MODE_PRIVATE)
+        val inputFromAsset = resources.assets.open(testFileName)
+
+        // 내부 저장소에 임시로 저장
+        newOutputStream.write(inputFromAsset.readBytes())
+        newOutputStream.close()
+
+        // 임시로 저장된 파일 갖고오기
+        val realFileStr = getFileStreamPath("tmp.mid")
+
+        return FileUri(Uri.parse(realFileStr.absolutePath), null)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sheet_redirection)
@@ -114,6 +129,10 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
                             // TODO DB에 접속해서 모든 미디데이터를 불러오기
 
                             // TODO 악보 인터페이스 실행
+
+                            // Test
+                            val tmpFileUri = makeTestMidiUri("Chopin__Waltz_Op._64_No._2_in_Csharp_minor.mid")
+                            doOpenFile(tmpFileUri)
                         }
                         deffered.await()
                     }
@@ -148,29 +167,9 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
                             val emptyMeasure =
                                 intent.extras?.getInt(MakeSheetType.EMPTY_MEASURE.intentKeys[0]) as Int
 
-                            // TODO 새롭게 만드는 경우이므로
-                            // TODO 생성된 악보 정보 데이터를 DB에 저장만 하면 됨
-
-                            // TODO 악보 인터페이스 실행
-                            // TODO 테스트
-
-                            // Asset에서 파일 긁어옴
-                            val testFileName = "Chopin__Waltz_Op._64_No._2_in_Csharp_minor.mid"
-                            val newOutputStream = openFileOutput("tmp.mid", Context.MODE_PRIVATE)
-                            val inputFromAsset = resources.assets.open(testFileName)
-
-                            // 내부 저장소에 임시로 저장
-                            newOutputStream.write(inputFromAsset.readBytes())
-                            Log.d("filelog", inputFromAsset.readBytes().toString())
-                            newOutputStream.close()
-
-                            // 임시로 저장된 파일 갖고오기
-                            val realFileStr = getFileStreamPath("tmp.mid")
-                            Log.d("filelog", realFileStr.canRead().toString())
-                            Log.d("filelog", realFileStr.absolutePath)
-                            val tmpFileUri = FileUri(Uri.parse(realFileStr.absolutePath), null)
-                            Log.d("filelog", tmpFileUri.getData(activity).toString())
-
+                            // Asset에서 파일 긁어옴 <Test>
+                            // TODO 원래 이 위치에서 MidiFile로 Midi파일 생성해서 저장해야 됨
+                            val tmpFileUri = makeTestMidiUri("Chopin__Waltz_Op._64_No._2_in_Csharp_minor.mid")
                             // 파일열고 액티비티 전환
                             doOpenFile(tmpFileUri)
 
