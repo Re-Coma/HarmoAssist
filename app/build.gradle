@@ -47,7 +47,8 @@ android {
             url 'https://jitpack.io'
         }
         maven {
-            url 'https://github.com/joytunes/USB-MIDI-Driver/raw/master/MIDIDriver/snapshots'}
+            url 'https://github.com/joytunes/USB-MIDI-Driver/raw/master/MIDIDriver/snapshots'
+        }
         mavenCentral()
         flatDir {
             dirs 'libs'

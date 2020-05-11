@@ -54,6 +54,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.zip.CRC32;
 
+import kr.sweetcase.harmoassist.MusicInfoFromSheetActivity;
 import kr.sweetcase.harmoassist.R;
 import kr.sweetcase.harmoassist.SheetRedirectionActivity;
 import kr.sweetcase.harmoassist.StatisticActivity;
@@ -167,9 +168,12 @@ public class SheetMusicActivity extends MidiHandlingActivity implements SheetMus
         PrimaryDrawerItem infoMusicBtn = new PrimaryDrawerItem()
                 .withName("악보 정보")
                 .withOnDrawerItemClickListener((view, i, item) -> {
-                    // TODO 액티비티 작성 필요
+                    Intent intent = new Intent(this, MusicInfoFromSheetActivity.class);
+                    intent.putExtra("music_info", musicInfoData);
+                    this.startActivity(intent);
                     return true;
                 });
+
         PrimaryDrawerItem statisticBtn = new PrimaryDrawerItem()
                 .withName("악보 분석")
                 .withOnDrawerItemClickListener((view, i, item) -> {
@@ -179,6 +183,7 @@ public class SheetMusicActivity extends MidiHandlingActivity implements SheetMus
                     this.startActivity(intent);
                     return true;
                 });
+
         PrimaryDrawerItem shareMidiBtn = new PrimaryDrawerItem()
                 .withName("미디파일 추출")
                 .withOnDrawerItemClickListener((view, i, item) -> {

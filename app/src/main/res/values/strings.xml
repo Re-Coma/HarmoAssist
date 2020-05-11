@@ -17,8 +17,6 @@
     <string name="statistic_basic_summary">지금까지 작곡을 하면서 가장 많이 사용되는 음("가장 많이 사용되는 피치")와 마디 단위로 가장 많이 사용된 코드(가장 많이 사용된 키) 상위 3개를 나타냅니다.</string>
 
 
-
-
     <!-- Music Sheet -->
 
     <string name="song_settings_str">More Settings</string>
