@@ -216,11 +216,13 @@ public class SheetMusicActivity extends MidiHandlingActivity implements SheetMus
                 });
         SecondaryDrawerItem advancedTechBtn = new SecondaryDrawerItem()
                 .withName("화음 배치");
+        SecondaryDrawerItem customTechBtn = new SecondaryDrawerItem()
+                .withName("커스텀 배치");
 
         /** 화음 배치 메뉴 **/
         ExpandableDrawerItem techBtn = new ExpandableDrawerItem()
                 .withName("화음 베치")
-                .withSubItems(techBasicBtn, advancedTechBtn);
+                .withSubItems(techBasicBtn, advancedTechBtn, customTechBtn);
 
 
         // Drawer
