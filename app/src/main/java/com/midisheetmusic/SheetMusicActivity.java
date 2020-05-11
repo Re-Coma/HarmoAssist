@@ -57,6 +57,7 @@ import java.util.zip.CRC32;
 import kr.sweetcase.harmoassist.R;
 import kr.sweetcase.harmoassist.SheetRedirectionActivity;
 import kr.sweetcase.harmoassist.StatisticActivity;
+import kr.sweetcase.harmoassist.dialogs.sheettechnicdialog.BasicTechnicSelectorDialog;
 import kr.sweetcase.harmoassist.listMaterials.Music;
 
 /**
@@ -207,7 +208,12 @@ public class SheetMusicActivity extends MidiHandlingActivity implements SheetMus
 
         /** 화음 배치 하위메뉴 **/
         SecondaryDrawerItem techBasicBtn = new SecondaryDrawerItem()
-                .withName("수동 설정");
+                .withName("수동 설정")
+                .withOnDrawerItemClickListener((view, i, item) -> {
+                    // TODO 화음 수동 설정
+                    new BasicTechnicSelectorDialog(this).show();
+                    return true;
+                });
         SecondaryDrawerItem advancedTechBtn = new SecondaryDrawerItem()
                 .withName("화음 배치");
 

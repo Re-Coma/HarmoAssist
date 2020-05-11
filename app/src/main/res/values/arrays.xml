@@ -7,7 +7,7 @@
         <item>8분의 3박자</item>
         <item>8분의 6박자</item>
     </string-array>
-    
+
     <string-array name="chord">
         <item>Major C</item>
         <item>Major Db</item>
@@ -34,5 +34,21 @@
         <item>Major A</item>
         <item>Major Bb</item>
         <item>Major B</item>
+    </string-array>
+
+    <!-- 화음 -->
+    <string-array name="tech_chord">
+        <item> Maj </item>
+        <item> Min </item>
+        <item> Dim </item>
+        <item> Aug </item>
+        <item> Maj-Maj-7 </item>
+        <item> Maj-7 </item>
+        <item> Min-7 </item>
+        <item> Min-7(-5) </item>
+        <item> dim-7 </item>
+        <item> 7-sus-4 </item>
+        <item> Maj-6 </item>
+        <item> Min-6 </item>
     </string-array>
 </resources>
