@@ -1,10 +1,12 @@
 package kr.sweetcase.harmoassist
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.activity_technic_dictionary.*
 import kr.sweetcase.amclib.midiManager.midiController.data.Pitch
 import kr.sweetcase.harmoassist.listMaterials.TechnicAdapter
 import kr.sweetcase.harmoassist.modules.technicDictionary.TechnicGenerator
@@ -40,6 +42,10 @@ class TechnicDictionaryActivity : AppCompatActivity() {
          * 그냥 창닫기 **/
         backBtn.setOnClickListener {
             onBackPressed()
+        }
+        custom_chord_btn.setOnClickListener {
+            val intent = Intent(this, CustomTechnicActivity::class.java)
+            startActivity(intent)
         }
     }
 }

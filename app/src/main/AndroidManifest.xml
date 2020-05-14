@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MusicInfoFromSheetActivity"></activity>
+        <activity android:name=".CustomTechnicActivity"></activity>
+        <activity android:name=".MusicInfoFromSheetActivity" />
         <activity android:name=".SheetRedirectionActivity" />
         <activity android:name=".StatisticActivity" />
         <activity android:name=".TechnicSummaryActivity" />

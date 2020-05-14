@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/red"
         android:layout_margin="10dp"
-        android:text="직접 만들어보기"
+        android:text="Custom Setting"
         android:textColor="@color/white"
         android:id="@+id/custom_chord_btn"
         android:textSize="20sp">
