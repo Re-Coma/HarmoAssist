@@ -146,7 +146,6 @@ class SelectedMusicDialog : Dialog {
         // 공유 버튼
         shareImgBtn.setOnClickListener {
 
-
             //TODO 실제로 미디파일을 전송해야 함
             var intent = Intent()
             intent.action = Intent.ACTION_SEND
