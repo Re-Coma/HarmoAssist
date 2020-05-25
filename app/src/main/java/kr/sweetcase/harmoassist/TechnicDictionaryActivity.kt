@@ -5,14 +5,16 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kr.sweetcase.harmoassist.listMaterials.RecyclerDecoration
+import kr.sweetcase.amclib.midiManager.midiController.data.Pitch
 import kr.sweetcase.harmoassist.listMaterials.TechnicAdapter
-import kr.sweetcase.harmoassist.listMaterials.TechnicalInfo
+import kr.sweetcase.harmoassist.modules.technicDictionary.TechnicGenerator
+import kr.sweetcase.harmoassist.modules.technicDictionary.TechnicalChord
+import kr.sweetcase.harmoassist.modules.technicDictionary.TechnicalInfo
+import kr.sweetcase.harmoassist.modules.technicDictionary.labels.TechnicLabel
 
 
 class TechnicDictionaryActivity : AppCompatActivity() {
 
-    val techArray : ArrayList<TechnicalInfo> = ArrayList()
 
     lateinit var backBtn : Button
 
@@ -23,16 +25,8 @@ class TechnicDictionaryActivity : AppCompatActivity() {
         /** 컴포넌트 초기화 **/
         backBtn = findViewById(R.id.back_btn_from_tech_list)
 
-        // 데이터 삽입
-        // TODO 얘는 프로토타입 용이고 나중에 데이터를 따로 추가할 예정
-        for(i in 0..20) {
-            techArray.add(
-                TechnicalInfo(
-                    "도미넌트 베리에이션 I",
-                    "곡의 종지를 효과적으로 만들 수 있는 도미넌트 베리에이션 중 하나이며 도미넌트 모션을 강조할 때 사용한다.",
-                    "tech_test.png")
-            )
-        }
+
+        val techArray = TechnicGenerator().generate()
 
         /** 리사이클러뷰 세팅 **/
         val recyclerView = findViewById<RecyclerView>(R.id.technic_list_view)
