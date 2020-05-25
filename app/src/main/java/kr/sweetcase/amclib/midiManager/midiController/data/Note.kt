@@ -25,9 +25,8 @@
  */
 package kr.sweetcase.amclib.midiManager.midiController.data
 
-import androidx.arch.core.util.Function
-import kr.sweetcase.DataOverLappingException
-import kr.sweetcase.RangeOutException
+import kr.sweetcase.amclib.midiManager.DataOverLappingException
+import kr.sweetcase.amclib.midiManager.RangeOutException
 import java.lang.Exception
 import java.lang.NullPointerException
 import java.util.*

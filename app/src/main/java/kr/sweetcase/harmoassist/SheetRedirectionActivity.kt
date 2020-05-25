@@ -2,27 +2,24 @@ package kr.sweetcase.harmoassist
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.Dialog
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
-import android.os.Looper
 import android.util.Log
-import android.widget.TextView
 import android.widget.Toast
-import io.lettuce.core.RedisConnectionException
+import androidx.appcompat.app.AppCompatActivity
+import com.midisheetmusic.ChooseSongActivity
+import com.midisheetmusic.FileUri
+import com.midisheetmusic.MidiFile
+import com.midisheetmusic.SheetMusicActivity
 import kotlinx.android.synthetic.main.activity_sheet_redirection.*
 import kotlinx.coroutines.*
 import kr.sweetcase.harmoassist.listMaterials.Music
 import kr.sweetcase.harmoassist.modules.AIConnectionModule.AIClientTask
 import kr.sweetcase.harmoassist.modules.AIConnectionModule.labels.RequestData
-import java.io.FileOutputStream
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.nio.file.StandardOpenOption
+import org.json.JSONArray
 import kotlin.coroutines.CoroutineContext
 
 // TODO 여기에서 악보 인터페이스로 들어가는 코드 작성하면 됨.
@@ -35,12 +32,17 @@ import kotlin.coroutines.CoroutineContext
  *
  * 인텐트 파라미터는 MakeSheetType 참고
  */
+
+
+
 class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
+
 
     private var backKeyClickTime : Long = 0
     private lateinit var musicInfoData : Music
     private var type : String? = null
     private var context : Context = this
+    private var activity : Activity = this
 
     private var clientConnection: AIClientTask? = null
 
@@ -71,6 +73,21 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
             alert.show()
         }
 
+    }
+
+    //TODO Test용 함수
+    fun makeTestMidiUri(testFileName : String) : FileUri {
+        val newOutputStream = openFileOutput("tmp.mid", Context.MODE_PRIVATE)
+        val inputFromAsset = resources.assets.open(testFileName)
+
+        // 내부 저장소에 임시로 저장
+        newOutputStream.write(inputFromAsset.readBytes())
+        newOutputStream.close()
+
+        // 임시로 저장된 파일 갖고오기
+        val realFileStr = getFileStreamPath("tmp.mid")
+
+        return FileUri(Uri.parse(realFileStr.absolutePath), null)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,13 +124,19 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
                     }
 
                     launch(exceptionHandler) {
-                        val deffered= async(Dispatchers.Default) {
+                        val deffered = async(Dispatchers.Default) {
+
                             musicInfoData = intent.extras?.getSerializable(MakeSheetType.CURRENT.intentKeys[0]) as Music
+                            Log.d("activity test", "success")
 
                             // TODO 현재 있는 악보를 불러오는 경우
                             // TODO DB에 접속해서 모든 미디데이터를 불러오기
 
                             // TODO 악보 인터페이스 실행
+
+                            // Test
+                            val tmpFileUri = makeTestMidiUri("Chopin__Waltz_Op._64_No._2_in_Csharp_minor.mid")
+                            doOpenFile(tmpFileUri, musicInfoData)
                         }
                         deffered.await()
                     }
@@ -143,15 +166,21 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
                         val differed = async(Dispatchers.Default) {
 
                             // intent 데이터 추출
-                            musicInfoData = intent.extras?.getSerializable(MakeSheetType.NEW.intentKeys[0]) as Music
-                            val emptyMeasure = intent.extras?.getInt(MakeSheetType.EMPTY_MEASURE.intentKeys[0]) as Int
+                            musicInfoData =
+                                intent.extras?.getSerializable(MakeSheetType.NEW.intentKeys[0]) as Music
+                            val emptyMeasure =
+                                intent.extras?.getInt(MakeSheetType.EMPTY_MEASURE.intentKeys[0]) as Int
 
-                            // TODO 새롭게 만드는 경우이므로
-                            // TODO 생성된 악보 정보 데이터를 DB에 저장만 하면 됨
+                            // Asset에서 파일 긁어옴 <Test>
+                            // TODO 원래 이 위치에서 MidiFile로 Midi파일 생성해서 저장해야 됨
+                            val tmpFileUri = makeTestMidiUri("Chopin__Waltz_Op._64_No._2_in_Csharp_minor.mid")
+                            // 파일열고 액티비티 전환
+                            doOpenFile(tmpFileUri, musicInfoData)
 
-                            // TODO 악보 인터페이스 실행
                         }
+                        differed.await()
                     }
+
 
                 }
                 MakeSheetType.NEW_AI.key -> {
@@ -224,7 +253,6 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
                                 }
 
                                 val iis = openFileInput("result.mid")
-
                                 // TODO 미디파일이 제대로 입력되었는지 확인할 필요가 있음
 
 
@@ -269,6 +297,54 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
             if(this.clientConnection!!.connected) {
                 this.clientConnection!!.conn.shutdown()
             }
+        }
+    }
+
+    /************************* 여기서부터 악보생성 관련 함수들 *********************************/
+    fun doOpenFile(file: FileUri, musicData : Music) {
+        val data = file.getData(this)
+        if (data == null || data.size <= 6 || !MidiFile.hasMidiHeader(data)) {
+            ChooseSongActivity.showErrorDialog(
+                "Error: Unable to open song: $file",
+                this
+            )
+            return
+        }
+        updateRecentFile(file)
+        val intent = Intent(
+            Intent.ACTION_VIEW, file.uri, this,
+            SheetMusicActivity::class.java
+        )
+        intent.putExtra(SheetMusicActivity.MidiTitleID, file.toString())
+        intent.putExtra("music_info", musicData)
+        startActivity(intent)
+
+        // 액티비티 종료
+        this.finish()
+    }
+
+    fun updateRecentFile(recentfile: FileUri) {
+        try {
+            val settings = getSharedPreferences("midisheetmusic.recentFiles", 0)
+            val editor = settings.edit()
+            var prevRecentFiles: JSONArray? = null
+            val recentFilesString = settings.getString("recentFiles", null)
+            prevRecentFiles = recentFilesString?.let { JSONArray(it) } ?: JSONArray()
+            val recentFiles = JSONArray()
+            val recentFileJson = recentfile.toJson()
+            recentFiles.put(recentFileJson)
+            for (i in 0 until prevRecentFiles.length()) {
+                if (i >= 10) {
+                    break // only store 10 most recent files
+                }
+                val file = prevRecentFiles.getJSONObject(i)
+                if (!FileUri.equalJson(recentFileJson, file)) {
+                    recentFiles.put(file)
+                }
+            }
+            editor.putString("recentFiles", recentFiles.toString())
+            editor.apply()
+        } catch (e: java.lang.Exception) {
         }
     }
 

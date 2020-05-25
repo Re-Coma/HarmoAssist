@@ -19,7 +19,7 @@
  */
 package kr.sweetcase.amclib.midiManager.midiController
 
-import kr.sweetcase.RangeOutException
+import kr.sweetcase.amclib.midiManager.RangeOutException
 import kr.sweetcase.amclib.midiManager.midiController.data.Measure
 import kr.sweetcase.amclib.midiManager.midiController.data.TimeSignature
 import java.util.*

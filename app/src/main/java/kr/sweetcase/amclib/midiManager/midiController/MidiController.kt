@@ -14,7 +14,7 @@
 
 package kr.sweetcase.amclib.midiManager.midiController
 
-import kr.sweetcase.RangeOutException
+import kr.sweetcase.amclib.midiManager.RangeOutException
 import kr.sweetcase.amclib.midiManager.midiController.cursor.MeasureCursor
 import kr.sweetcase.amclib.midiManager.midiController.cursor.NoteCursor
 import kr.sweetcase.amclib.midiManager.midiController.data.Measure
