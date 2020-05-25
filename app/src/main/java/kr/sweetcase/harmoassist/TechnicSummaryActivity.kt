@@ -72,7 +72,7 @@ class TechnicSummaryActivity : AppCompatActivity(), MidiDriver.OnMidiStartListen
 
 
         // 화음 출력
-
+        technic_chord_text.text = "V7sus4 -> V7 -> I"
         // 재생 버튼
         tech_play_btn.setOnClickListener {
 

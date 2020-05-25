@@ -212,17 +212,24 @@ public class MidiPlayer extends LinearLayout {
         leftHandButton.setOnClickListener(v -> toggleTrack(LEFT_TRACK));
         rightHandButton.setOnClickListener(v -> toggleTrack(RIGHT_TRACK));
         pianoButton.setOnClickListener(v -> togglePiano());
+        pianoButton.setVisibility(GONE);
 
         // Resize the speedBar so all toolbar icons fit on the screen
         speedBar.post(
                 () -> {
                     int iconsWidth = backButton.getWidth() + resetButton.getWidth() + playButton.getWidth() +
                             rewindButton.getWidth() + fastFwdButton.getWidth() + midiButton.getWidth() +
-                            leftHandButton.getWidth() + rightHandButton.getWidth() + pianoButton.getWidth() +
-                            settingsButton.getWidth();
-                    int screenwidth = activity.getWindowManager().getDefaultDisplay().getWidth();
+
+                            leftHandButton.getWidth() + rightHandButton.getWidth() //+ pianoButton.getWidth() +
+                            + settingsButton.getWidth();
+                    //piano button is out
+                    Point sizePoint = new Point();
+                    activity.getWindowManager().getDefaultDisplay().getSize(sizePoint);
+                    int screenwidth = sizePoint.x;
                     speedBar.setLayoutParams(
-                            new LayoutParams(screenwidth - iconsWidth - 16, speedBar.getHeight()));
+                            //new LayoutParams(screenwidth - iconsWidth - 16, speedBar.getHeight()));
+                        new LayoutParams(screenwidth - iconsWidth - 128, speedBar.getHeight()));
+
                 }
         );
 

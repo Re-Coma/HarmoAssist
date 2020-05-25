@@ -31,13 +31,15 @@
 
             </TextView>
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:id="@+id/technic_chord_btn_layout">
+                android:textSize="15sp"
+                android:id="@+id/technic_chord_text"
+                android:textAlignment="center">
 
-            </LinearLayout>
+            </TextView>
         </LinearLayout>
 
         <!-- 용도 설명 -->

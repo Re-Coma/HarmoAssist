@@ -107,7 +107,9 @@ public class SheetMusicActivity extends MidiHandlingActivity implements SheetMus
         setContentView(R.layout.sheet_music_layout);
 
         // Keep screen on
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ClefSymbol.LoadImages(this);
         TimeSigSymbol.LoadImages(this);
@@ -144,7 +146,8 @@ public class SheetMusicActivity extends MidiHandlingActivity implements SheetMus
         options.scrollVert = settings.getBoolean("scrollVert", false);
         options.shade1Color = settings.getInt("shade1Color", options.shade1Color);
         options.shade2Color = settings.getInt("shade2Color", options.shade2Color);
-        options.showPiano = settings.getBoolean("showPiano", true);
+        options.showPiano = settings.getBoolean("showPiano", false); // TODO 건반 관련
+
         String json = settings.getString("" + midiCRC, null);
         MidiOptions savedOptions = MidiOptions.fromJson(json);
         if (savedOptions != null) {
@@ -256,7 +259,8 @@ public class SheetMusicActivity extends MidiHandlingActivity implements SheetMus
         layout.addView(player);
 
         piano = new Piano(this);
-        layout.addView(piano);
+        //layout.addView(piano);
+
         player.SetPiano(piano);
         layout.requestLayout();
 

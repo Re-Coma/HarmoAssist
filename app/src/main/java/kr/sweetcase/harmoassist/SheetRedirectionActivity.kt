@@ -135,7 +135,7 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
                             // TODO 악보 인터페이스 실행
 
                             // Test
-                            val tmpFileUri = makeTestMidiUri("Chopin__Waltz_Op._64_No._2_in_Csharp_minor.mid")
+                            val tmpFileUri = makeTestMidiUri("Oceanicism.mid")
                             doOpenFile(tmpFileUri, musicInfoData)
                         }
                         deffered.await()
@@ -266,6 +266,9 @@ class SheetRedirectionActivity : AppCompatActivity(), CoroutineScope {
                                 loading_test.text = "데이터베이스에 저장중"
 
                                 // TODO 악보 인터페이스 실행
+
+                                val tmpFileUri = makeTestMidiUri("Chopin__Waltz_Op._64_No._2_in_Csharp_minor.mid")
+                                doOpenFile(tmpFileUri, musicInfoData)
                             } else {
                                 throw Exception("서버와의 연결에 실패했습니다.")
                             }
