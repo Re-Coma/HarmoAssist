@@ -15,11 +15,6 @@
     * Tensorflow 2.1 + Keras
     * Magenta Melody Model
     * Magenta Music DataSet
-* **SNS WebServer**(EXTENDED)
-    * DJango(Python, HTML, JavaScript)
-    * Music21
-    * MariaDB
-    * Redis(TimeLine)
 ## __ .DEVELOPERS. __
 * **Score Interface**: 최정환
 * **UI/UX**: 이동호
