@@ -1,5 +1,4 @@
 package kr.sweetcase.harmoassist.modules.DBModule.DBMaterials
-
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import kr.sweetcase.harmoassist.modules.DBModule.DBHandler

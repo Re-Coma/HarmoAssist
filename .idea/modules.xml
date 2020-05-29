@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AndroidStudioProjects-HarmoAssist.iml" filepath="$PROJECT_DIR$/AndroidStudioProjects-HarmoAssist.iml" group="HarmoAssist" />
-      <module fileurl="file://$PROJECT_DIR$/app/AndroidStudioProjects-HarmoAssist-app.iml" filepath="$PROJECT_DIR$/app/AndroidStudioProjects-HarmoAssist-app.iml" group="HarmoAssist/app" />
-      <module fileurl="file://$PROJECT_DIR$/GitHub-HarmoAssist.iml" filepath="$PROJECT_DIR$/GitHub-HarmoAssist.iml" group="HarmoAssist" />
-      <module fileurl="file://$PROJECT_DIR$/HarmoAssist.iml" filepath="$PROJECT_DIR$/HarmoAssist.iml" group="HarmoAssist" />
-      <module fileurl="file://$PROJECT_DIR$/app/HarmoAssist-app.iml" filepath="$PROJECT_DIR$/app/HarmoAssist-app.iml" group="HarmoAssist/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/HarmoAssist.iml" filepath="$PROJECT_DIR$/.idea/HarmoAssist.iml" group="HarmoAssist" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="HarmoAssist/app" />
     </modules>
   </component>

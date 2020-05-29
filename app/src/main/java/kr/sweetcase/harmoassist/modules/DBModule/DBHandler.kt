@@ -316,8 +316,10 @@ class DBHandler(context: Context) :SQLiteOpenHelper(context, DB_NAME, null, DB_V
     fun searchFileInfo(keyWord: String): Song{
         val db=readableDatabase
         val selectALLQuery=("SELECT * FROM $FILEINFO_TABLE WHERE $TITLE LIKE \"%$keyWord%\"")
+        val selectALLQuery2=("SELECT * FROM $SHEET_TABLE ORDER BY $TITLE ASC")
         val cursor=db.rawQuery(selectALLQuery,null)
-        var songinfo: Song=Song()
+        val cursor2=db.rawQuery(selectALLQuery2,null)
+        var songInfo: Song=Song()
 
         if(cursor!=null){
             if(cursor.moveToFirst()){
@@ -326,14 +328,25 @@ class DBHandler(context: Context) :SQLiteOpenHelper(context, DB_NAME, null, DB_V
                     fileInfo.title=cursor.getString(cursor.getColumnIndex(TITLE))
                     fileInfo.summary=cursor.getString(cursor.getColumnIndex(SUMMARY))
 
-                    songinfo.titleList.add(fileInfo)
+                    songInfo.titleList.add(fileInfo)
                 }while(cursor.moveToNext())
+            }
+
+            if(cursor2.moveToFirst()){
+                do{
+                    var sheetInfo=SheetDBHandler()
+                    sheetInfo.harmonic=cursor2.getString(cursor2.getColumnIndex(HAMONIC))
+                    sheetInfo.tempo=cursor2.getInt(cursor2.getColumnIndex(TEMPO))
+                    sheetInfo.timeSignature=cursor2.getString(cursor2.getColumnIndex(TIME_SIGNATURE))
+
+                    songInfo.sheetList.add(sheetInfo)
+                }while(cursor2.moveToNext())
             }
         }
         cursor.close()
         db.close()
 
-        return songinfo
+        return songInfo
     }
 
     //선택한 곡의 정보를 모두 불러오는 함수

@@ -9,11 +9,9 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import kr.sweetcase.harmoassist.MakeSheetType
-import kr.sweetcase.harmoassist.R
-import kr.sweetcase.harmoassist.SheetRedirectionActivity
-import kr.sweetcase.harmoassist.StatisticActivity
+import kr.sweetcase.harmoassist.*
 import kr.sweetcase.harmoassist.listMaterials.Music
+import kr.sweetcase.harmoassist.modules.DBModule.DBHandler
 
 /**
  * 음약을 선택했을 때 뜨는 다이얼로그
@@ -85,6 +83,8 @@ class SelectedMusicDialog : Dialog {
             }
 
         }
+
+        // 열기
         openBtn.setOnClickListener {
             //intent 데이터 담기
             val enterIntent = Intent(this.activity, SheetRedirectionActivity::class.java)
@@ -131,8 +131,17 @@ class SelectedMusicDialog : Dialog {
 
                 // TODO 삭제 버튼으로
                 // TODO DB접근해서 항목 삭제
+                val DBhander= DBHandler(context)
+
+                var title=music.title
+                DBhander.deleteFileInfo(title)
+
+                val intent = Intent(context, MusicListActivity::class.java)
+
                 dialog.dismiss()
                 this.dismiss()
+                context.startActivity(intent)
+
             }
             noBtn.setOnClickListener {
                 dialog.dismiss()
@@ -143,7 +152,6 @@ class SelectedMusicDialog : Dialog {
         }
         // 공유 버튼
         shareImgBtn.setOnClickListener {
-
 
             //TODO 실제로 미디파일을 전송해야 함
             var intent = Intent()

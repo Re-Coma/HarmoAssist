@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import kr.sweetcase.harmoassist.modules.DBModule.DBHandler
 
+
 class Measure {
     var title:String=""
     var trackIndex:Int=0
