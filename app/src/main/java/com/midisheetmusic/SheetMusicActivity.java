@@ -227,10 +227,30 @@ public class SheetMusicActivity extends MidiHandlingActivity implements SheetMus
         SecondaryDrawerItem customTechBtn = new SecondaryDrawerItem()
                 .withName("커스텀 배치");
 
+        /** AI 하위 메뉴 **/
+        SecondaryDrawerItem brightAIBtn = new SecondaryDrawerItem()
+                .withName("밝게")
+                .withOnDrawerItemClickListener((view, i, item) -> {
+                    // TODO 여기서 RedirectionActivity로 넘어가는 코드 작성 필수
+                    // RedirectionActivity에서 intent항목 참고하면서 작성
+                   return true;
+                });
+        SecondaryDrawerItem darkAIBtn = new SecondaryDrawerItem()
+                .withName("어둡게")
+                .withOnDrawerItemClickListener((view, i, item) -> {
+                    // TODO 저 위에 있는거하고 똑같은 방식으로 코드 작성
+                    return true;
+                });
+
         /** 화음 배치 메뉴 **/
         ExpandableDrawerItem techBtn = new ExpandableDrawerItem()
                 .withName("화음 베치")
                 .withSubItems(techBasicBtn, advancedTechBtn, customTechBtn);
+
+        /** AI 작동 메뉴 **/
+        ExpandableDrawerItem aiBtn = new ExpandableDrawerItem()
+                .withName("AI 실행")
+                .withSubItems(brightAIBtn, darkAIBtn);
 
 
         // Drawer
@@ -243,7 +263,8 @@ public class SheetMusicActivity extends MidiHandlingActivity implements SheetMus
                         shareMidiBtn,
                         saveBtn,
                         new DividerDrawerItem(),
-                        techBtn
+                        techBtn,
+                        aiBtn
                 )
                 .withOnDrawerItemClickListener((view, i, item) -> drawerItemClickListener(item))
                 .withDrawerGravity(Gravity.RIGHT)
